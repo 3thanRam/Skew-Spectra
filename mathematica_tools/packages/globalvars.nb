@@ -1,0 +1,185 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      6486,        177]
+NotebookOptionsPosition[      5766,        156]
+NotebookOutlinePosition[      6190,        173]
+CellTagsIndexPosition[      6147,        170]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"BeginPackage", "[", "\"\<fftlogdiv`\>\"", "]"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"k", "::", "usage"}], "=", "\"\<vector k\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"k0", "::", "usage"}], "=", "\"\<Length of k\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"muk", "::", "usage"}], "=", "\"\<cosine of k.z\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"q", "::", "usage"}], "=", "\"\<vector q\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"q0", "::", "usage"}], "=", "\"\<Length of q\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"muq", "::", "usage"}], "=", "\"\<cosine of q.z\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"phi", "::", "usage"}], "=", "\"\<last angle\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"kmq", "::", "usage"}], "=", "\"\<Norm of k-q\>\""}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Epsilon]", "::", "usage"}], "=", "\"\<small parameter\>\""}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[Nu]", "::", "usage"}], "=", "\"\<fftlog bias\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"$Assumptions", "::", "usage"}], "=", "\"\<Assumptions\>\""}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"$Assumptions", "=", " ", 
+     RowBox[{
+      RowBox[{"k0", ">=", "0"}], "&&", 
+      RowBox[{"q0", ">=", "0"}], "&&", 
+      RowBox[{"kmq", ">=", "0"}], "&&", " ", 
+      RowBox[{
+       RowBox[{"2", " ", "Pi"}], ">=", "phi", ">=", "0"}], " ", "&&", " ", 
+      RowBox[{"1", ">=", "muk", ">=", 
+       RowBox[{"-", "1"}]}], " ", "&&", " ", 
+      RowBox[{"1", ">=", "muq", ">=", 
+       RowBox[{"-", "1"}]}], " ", "&&", " ", 
+      RowBox[{"\[Epsilon]", " ", ">", " ", "0"}], "&&", 
+      RowBox[{
+       RowBox[{"{", " ", 
+        RowBox[{
+        "k0", ",", "q0", ",", "muk", ",", " ", "muq", ",", "phi", ",", " ", 
+         "\[Epsilon]", ",", "\[Nu]"}], "}"}], "\[Element]", "Reals"}]}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"k", "=", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", 
+       RowBox[{"k0", " ", 
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"1", "-", 
+          RowBox[{"muk", "^", "2"}]}], "]"}]}], ",", 
+       RowBox[{"k0", " ", "muk"}]}], "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"q", "=", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"q0", " ", 
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"1", "-", 
+          RowBox[{"muq", "^", "2"}]}], "]"}], " ", 
+        RowBox[{"Cos", "[", "phi", "]"}]}], ",", 
+       RowBox[{"q0", " ", 
+        RowBox[{"Sqrt", "[", 
+         RowBox[{"1", "-", 
+          RowBox[{"muq", "^", "2"}]}], "]"}], " ", 
+        RowBox[{"Sin", "[", "phi", "]"}]}], ",", 
+       RowBox[{"q0", " ", "muq"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"End", "[", "]"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"End", " ", "Private", " ", "Context"}], "*)"}], 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"EndPackage", "[", "]"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.928916006091703*^9, 3.928916018405436*^9}, {
+   3.92891605273807*^9, 3.928916224361649*^9}, {3.928916906750566*^9, 
+   3.928916936412898*^9}, 3.928920218561016*^9, {3.9289218689828863`*^9, 
+   3.928921870863332*^9}},
+ CellLabel->
+  "In[435]:=",ExpressionUUID->"321eca5d-d7c5-4bbd-bcb7-58a62c0ba9b8"],
+
+Cell[BoxData["\<\"fftlogdiv`\"\>"], "Output",
+ CellChangeTimes->{
+  3.928916230267503*^9, 3.928916675047068*^9, 3.928916941347533*^9, 
+   3.928916975007846*^9, 3.928917246542322*^9, 3.928917770342709*^9, 
+   3.928918018599309*^9, 3.928920106653674*^9, {3.928920228991384*^9, 
+   3.928920231666684*^9}, {3.928921874649802*^9, 3.928921875498212*^9}},
+ CellLabel->
+  "Out[435]=",ExpressionUUID->"853d66eb-3213-4bda-bb08-225d6e84ff52"],
+
+Cell[BoxData["\<\"fftlogdiv`Private`\"\>"], "Output",
+ CellChangeTimes->{
+  3.928916230267503*^9, 3.928916675047068*^9, 3.928916941347533*^9, 
+   3.928916975007846*^9, 3.928917246542322*^9, 3.928917770342709*^9, 
+   3.928918018599309*^9, 3.928920106653674*^9, {3.928920228991384*^9, 
+   3.928920231666684*^9}, {3.928921874649802*^9, 3.928921875856477*^9}},
+ CellLabel->
+  "Out[447]=",ExpressionUUID->"0596c4c3-c7e9-42cd-9b70-565a5e655786"],
+
+Cell[BoxData["\<\"fftlogdiv`Private`\"\>"], "Output",
+ CellChangeTimes->{
+  3.928916230267503*^9, 3.928916675047068*^9, 3.928916941347533*^9, 
+   3.928916975007846*^9, 3.928917246542322*^9, 3.928917770342709*^9, 
+   3.928918018599309*^9, 3.928920106653674*^9, {3.928920228991384*^9, 
+   3.928920231666684*^9}, {3.928921874649802*^9, 3.928921875866311*^9}},
+ CellLabel->
+  "Out[451]=",ExpressionUUID->"3953923f-f7e6-4658-95e2-eacda7913c16"]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{870, 762},
+WindowMargins->{{Automatic, 79.5}, {0, Automatic}},
+FrontEndVersion->"12.3 for Linux x86 (64-bit) (June 19, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"fec5845f-2bda-4fc7-a0d0-842356a3ce34"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 3852, 104, 562, "Input",ExpressionUUID->"321eca5d-d7c5-4bbd-bcb7-58a62c0ba9b8",
+ InitializationCell->True],
+Cell[4435, 128, 431, 7, 33, "Output",ExpressionUUID->"853d66eb-3213-4bda-bb08-225d6e84ff52"],
+Cell[4869, 137, 439, 7, 33, "Output",ExpressionUUID->"0596c4c3-c7e9-42cd-9b70-565a5e655786"],
+Cell[5311, 146, 439, 7, 82, "Output",ExpressionUUID->"3953923f-f7e6-4658-95e2-eacda7913c16"]
+}, Open  ]]
+}
+]
+*)
+
