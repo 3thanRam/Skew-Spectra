@@ -26,18 +26,31 @@ BeginPackage["savefcts`"]
 savefunc::usage=" save results";
 
 Begin["`Private`"]
- savefunc[M0_]:=Module[{M=M0},
-n=Length[M];
+ savefunc[SM0_,UnSM0_,Symdivergences0_,UnSymdivergences0_,biases0_]:=Module[{SM=SM0,UnSM=UnSM0,Symdivergences=Symdivergences0,UnSymdivergences=UnSymdivergences0,biases=biases0},
+n=Length[SM];
 fileName="savefile.txt";
 Export[fileName,""];
 file=OpenAppend[fileName,PageWidth->Infinity];
 
-For[i=1,i<n+1,i++,
-datai=Total[M[[i]]]/. x_Integer:>N[x];
-tosave="Sn"<>ToString[i]<>"="<>ToString[CForm[datai]]<>";";
-Print[tosave];
-WriteString[file,tosave,"\n"]
+For[b=1,b<Length[biases]+1,b++,
+tosave="nu"<>ToString[b]<>"="<>ToString[CForm[biases[[b]]]]<>";";
+WriteString[file,tosave,"\n"];
 ];
+
+saveMdata[dataname0_,datamatr0_]:=Module[{dataname=dataname0,datamatr=datamatr0},
+For[i=1,i<n+1,i++,For[j=1,j<n+1,j++,
+datai=datamatr[[i,j]]/. x_Integer:>N[x];
+term=dataname<>ToString[i]<>","<>ToString[j]<>"]";
+
+tosave=term<>"="<>ToString[CForm[datai]]<>";";
+WriteString[file,tosave,"\n"]
+];];
+];
+saveMdata["Sym",SM];
+saveMdata["UnSym",UnSM];
+saveMdata["SymDivs",Symdivergences];
+saveMdata["UnSymDivs",UnSymdivergences];
+
 Close[file];
 ];
  

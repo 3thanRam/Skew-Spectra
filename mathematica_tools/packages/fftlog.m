@@ -30,21 +30,22 @@ n2::usage="fftlog index from second power spectrum";
 
 Begin["`Private`"]
 Get[NotebookDirectory[]<>"globalvars.m"] ;
+Get[NotebookDirectory[]<>"util.m"];
 Get[NotebookDirectory[]<>"losintegrals.m"];
 Get[NotebookDirectory[]<>"losintcalcs.m"];
 
-
-
 q0kmqmuqdecomp[v0_]:=Module[{v=v0},
-v=Expand[v];
+v=Expand[Simplfunc[v]];
+(*v=If[Head[v]===Plus,List@@v,{v}];*)
 Tv=Table[{ q0 D[v[[l]],q0]/v[[l]],kmq D[v[[l]],kmq]/v[[l]],muq D[v[[l]],muq]/v[[l]],v[[l]]/. {q0->1,kmq->1,muq->1}},{l,1,Length[v]}];
-Coefs={};
-Tuniq={};
-For[i=1,i<Length[Tv]+1,i++,
-If[!MemberQ[Coefs,Tv[[i,{1,2,3}]]],AppendTo[Coefs,Tv[[i,{1,2,3}]]];AppendTo[Tuniq,Tv[[i]]],coefind=Position[Coefs,Tv[[i,{1,2,3}]]][[1]];Tuniq[[coefind,4]]+=Tv[[i,4]];]
-];
-(*S=Sum[v1[[m,4]] J2[1,v1[[m,1]]+n1,v1[[m,2]]+n2]/J2[1,n1,n2],{m,1,Length[v1]}]*)
-Sum[ Tuniq[[m,4]] losint[-(Tuniq[[m,1]]-Tuniq[[m,3]])/2+n1, -Tuniq[[m,2]]/2+n2,Tuniq[[m,3]]],{m,1,Length[Tuniq]}]
+
+grouped=GroupBy[Tv,#[[{1,2,3}]]&->(#[[4]]&)];
+groupedSums=KeyValueMap[#1->Total[#2]&,grouped];
+Tuniq=Flatten/@List@@@Normal@groupedSums;
+
+res=Sum[ Tuniq[[m,4]] losint[-(Tuniq[[m,1]]-Tuniq[[m,3]])/2+n1, -Tuniq[[m,2]]/2+n2,Tuniq[[m,3]]],{m,1,Length[Tuniq]}];
+
+res=Collect[res,muk]
 ]
 
 End[] (*End Private Context*)

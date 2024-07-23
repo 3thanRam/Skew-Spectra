@@ -25,6 +25,7 @@ losint::usage="integral over q of (q.z)^n3 q^-n1 kmq^-n2";
 
 Begin["`Private`"]
 Get[NotebookDirectory[]<>"globalvars.m"] ;
+Get[NotebookDirectory[]<>"losintegrals.m"] ;
 
 delta[x_,y_]/;(Order[x,y]<0):=delta[y,x];
 delta[x_,x_]:=1;

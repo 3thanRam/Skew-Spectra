@@ -31,103 +31,102 @@ Begin["`Private`"]
 
 Get[NotebookDirectory[]<>"globalvars.m"] ;
 
-UVdiv[fct0_]:= Module[{fct=fct0},
-expr=q0^2 fct//.{k0-> \[Epsilon] q0}//Simplify//Rationalize;
 
-expr = FullSimplify[Normal[Series[expr ,{\[Epsilon],0,4}]]];
+fastintegral[expr0_,var0_,a0_,b0_]:=Module[{expr=expr0,var=var0,a=a0,b=b0},
+indef=Integrate[expr,var];
+Ib=Quiet[Limit[indef,var->b,Direction->"FromBelow"]];
+Ia=Quiet[Limit[indef,var->a,Direction->"FromAbove"]];
+Ib-Ia
+];
 
-expr = FullSimplify[Integrate[ expr,{phi,0,2\[Pi]}]];
+Clear[phimuintegratelimit]
+phimuintegratelimit[fct0_,limit0_]:=phimuintegratelimit[fct0,limit0]=Module[{fct=fct0,limit=limit0},
+q0k0replace=If[limit=="UV",{k0-> \[Epsilon] q0},{q0-> \[Epsilon] k0}];
+ordeps=If[limit=="UV",4,1];
 
-expr = ExpandAll[Integrate[expr,{muq,-1,1}]];
+expr=q0^2 fct/.q0k0replace//Rationalize//Simplify;
+expr =Normal[Series[expr ,{\[Epsilon],0,ordeps}]]//Simplify;
+expr =Assuming[ $Assumptions,fastintegral[expr,phi,0,2\[Pi]]]// Simplify;
+expr =fastintegral[expr,muq,-1,1] //ExpandAll
+];
 
-expr  =FullSimplify[Collect[Integrate[expr,q0]//.{\[Epsilon]-> k0/q0},q0]]
-]
-IRdiv[fct0_]:= Module[{fct=fct0},
-expr=q0^2 fct//.{q0-> \[Epsilon] k0}//Simplify//Rationalize;
 
-expr = FullSimplify[Normal[Series[expr ,{\[Epsilon],0,1}]]];
 
-expr = FullSimplify[Integrate[ expr,{phi,0,2\[Pi]}]];
 
-expr = ExpandAll[Integrate[expr,{muq,-1,1}]];
+Clear[integrandlimit]
+integrandlimit[fct0_,limit0_]:=integrandlimit[fct0,limit0]=Module[{fct=fct0,limit=limit0},
+epsreplace=If[limit=="UV",{\[Epsilon]-> k0/q0},{\[Epsilon]-> q0/k0}];
+Collect[Integrate[fct0,q0]/.epsreplace,q0] //Simplify
+];
 
-expr  =FullSimplify[Collect[Integrate[expr,q0]//.{\[Epsilon]-> q0/k0},q0]]
-]
-UVP[fct0_]:= Module[{fct=fct0},
-expr=q0^2 fct//.{k0-> \[Epsilon] q0}//Simplify//Rationalize;
 
-expr = 1/(2\[Pi])^3 FullSimplify[Normal[Series[expr ,{\[Epsilon],0,4}]]];
-
-expr = FullSimplify[Integrate[ expr,{phi,0,2\[Pi]}]];
-
-expr = ExpandAll[Integrate[expr,{muq,-1,1}]]//.{\[Epsilon]-> k0/q0};
-Rationalize[expr]
-]
-IRP[fct0_]:= Module[{fct=fct0},
-expr=q0^2 fct//.{q0-> \[Epsilon] k0}//Simplify//Rationalize;
-
-expr = 1/(2\[Pi])^3FullSimplify[Normal[Series[expr ,{\[Epsilon],0,1}]]];
-
-expr = FullSimplify[Integrate[ expr,{phi,0,2\[Pi]}]];
-
-expr = 2(6\[Pi]^2) ExpandAll[Integrate[expr,{muq,-1,1}]]//.{\[Epsilon]-> q0/k0};
-Rationalize[expr]
-]
-End[] (*End Private Context*)
+Clear[Plimit]
+Plimit[fct0_,limit0_]:=Plimit[fct0,limit0]= Module[{fct=fct0,limit=limit0},
+epsreplace=If[limit=="UV",{\[Epsilon]-> k0/q0},{\[Epsilon]-> q0/k0}];
+1/(2\[Pi])^3 fct0/.epsreplace //Rationalize 
+];
 
 q0factor[v0_]:=Module[{v=v0},
 v=Expand[v];
 v=If[Head[v]===Plus,List@@v,{v}];
-
+v=DeleteCases[v,0];
 Tv=Table[{Simplify[ q0 D[v[[l]],q0]/v[[l]]],v[[l]]/. {q0->1}},{l,1,Length[v]}];
-Coefs={};
-Tuniq={};
-For[i=1,i<Length[Tv]+1,i++,
-If[!MemberQ[Coefs,Tv[[i,1]]],AppendTo[Coefs,Tv[[i,1]]];AppendTo[Tuniq,Tv[[i]]],coefind=Position[Coefs,Tv[[i,1]]][[1]];
-Tuniq[[coefind,2]]+=Tv[[i,2]];]
-];
+grouped=GroupBy[Tv,#[[1]]&->(#[[2]]&)];
+groupedSums=KeyValueMap[#1->Total[#2]&,grouped];
+Tuniq=Flatten/@List@@@Normal@groupedSums;
 Simplify[Tuniq]
-]
+];
 
 singlebias[expr0_]:=Module[{expr=expr0},
 default=\[Nu]\[Element]Reals;
 {q0pow,coef}=expr[[{1,2}]];
 
-s=Assuming[$Assumptions,FullSimplify@Solve[q0^q0pow==0,{q0,\[Nu]}]][[1]][[1]];
-reg=If[ResourceFunction["EmptyQ"][s],default,If[s[[1]]==q0&&s[[2]][[1]]==0,Not[s[[2]][[2]]],default]];
-Print[reg,s];
-reg
+s=Quiet[Assuming[$Assumptions,Simplify@Solve[q0^q0pow==0,{q0,\[Nu]}]][[1]][[1]]];
+reg=If[ResourceFunction["EmptyQ"][s],default,If[s[[1]]==q0&&s[[2]][[1]]==0,Not[s[[2]][[2]]],default]]
 
-]
+];
 
+
+reducedregion[regionconstraints0_]:=
+Assuming[$Assumptions, Reduce[Element[{\[Nu]},ImplicitRegion[Join[regionconstraints0,{\[Nu]\[Element]Reals}],{\[Nu]}]],\[Nu]]];
+
+extractnuterms:=DeleteCases[vi_/;FreeQ[vi,\[Nu]]==True];
+vectpow[vect0_,expr0_]:=Module[{vect=vect0,expr=expr0},
+normexpr=If[expr==0,1,expr];
+expr=vect D[expr,vect]/normexpr ;
+expr=If[Head[expr]===Plus,List@@expr,{expr}];
+res=extractnuterms[expr];
+If[Length[res]==0,0,res[[1]]/\[Nu]]
+];
+
+replacePqPk[expr0_]:=Module[{expr=expr0},
+powPk=vectpow[k0,expr];
+powPq=vectpow[q0,expr];
+expr0 (Pk/k0^\[Nu])^powPk  (Pq/q0^\[Nu])^powPq  //Simplify
+];
 
 UVIRbiases[expr0_,mode0_]:=Module[{expr=expr0,mode=mode0},
 Pl1=q0^\[Nu];
-pIR=Pq Pk;
-If[mode=="sym",
-Pl2= Norm[k-q]^\[Nu];
-pUV=Pq^2,
-Pl2= k0^\[Nu];
-pUV=Pq Pk];
-Print[Pl1 ,Pl2,pIR,pUV];
-UVq0fact=q0factor[UVdiv[expr Pl1 Pl2]];
-IRq0fact=q0factor[IRdiv[expr  Pl1 Pl2]];
-IRq0fact=Array[{-IRq0fact[[#]][[1]],IRq0fact[[#]][[2]]}&,Length[UVq0fact]];
+Pl2=If[mode=="sym", Norm[k-q]^\[Nu],k0^\[Nu]];
 
-corrections={pIR IRP[expr],pUV UVP[expr]};
+{IRint,UVint}=Table[phimuintegratelimit[expr  Pl1 Pl2,limit],{limit,{"IR","UV"}}];
+IRq0fact=q0factor[integrandlimit[IRint,"IR"]];
+UVq0fact=q0factor[integrandlimit[UVint,"UV"]];
 
+IRq0fact=Array[{-IRq0fact[[#]][[1]],IRq0fact[[#]][[2]]}&,Length[IRq0fact]];
 q0fact={IRq0fact,UVq0fact};
-regions={};
-For[d=1,d<3,d++,
+
+corrections={replacePqPk[ Plimit[IRint,"IR"]],replacePqPk[ Plimit[UVint,"UV"]]};
+
+
+regionfct[d_]:=Block[{regionconstraints},
 regionconstraints=Array[singlebias[q0fact[[d]][[#]]]&,Length[q0fact[[d]]]];
-AppendTo[regionconstraints,\[Nu]\[Element]Reals];
-region=ImplicitRegion[regionconstraints,{\[Nu]}];
-region=Reduce[Element[{\[Nu]},region],\[Nu]];
-AppendTo[regions,{region,corrections[[d]]}];
+{reducedregion[regionconstraints],corrections[[d]]}
 ];
 
-regions
+{regionfct[1],regionfct[2]}
 ]
+End[] (*End Private Context*)
 EndPackage[]
 
 

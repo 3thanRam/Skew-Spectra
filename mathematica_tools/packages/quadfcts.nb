@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     26319,        756]
-NotebookOptionsPosition[     25593,        735]
-NotebookOutlinePosition[     26015,        752]
-CellTagsIndexPosition[     25972,        749]
+NotebookDataLength[     26538,        754]
+NotebookOptionsPosition[     25812,        733]
+NotebookOutlinePosition[     26234,        750]
+CellTagsIndexPosition[     26191,        747]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -39,76 +39,63 @@ Cell[BoxData[
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"Dlist", "::", "usage"}], "=", "\"\<Array of D Kernels\>\""}], 
+     RowBox[{"Dfunc", "::", "usage"}], "=", "\"\<Array of d Kernels\>\""}], 
     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D1", "::", "usage"}], "=", "\"\<D1 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D2", "::", "usage"}], "=", "\"\<D2 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D3", "::", "usage"}], "=", "\"\<D3 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D4", "::", "usage"}], "=", "\"\<D4 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D5", "::", "usage"}], "=", "\"\<D5 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D6", "::", "usage"}], "=", "\"\<D6 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D7", "::", "usage"}], "=", "\"\<D7 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D8", "::", "usage"}], "=", "\"\<D8 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D9", "::", "usage"}], "=", "\"\<D9 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D10", "::", "usage"}], "=", "\"\<D10 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D11", "::", "usage"}], "=", "\"\<D11 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D12", "::", "usage"}], "=", "\"\<D12 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D13", "::", "usage"}], "=", "\"\<D13 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{
-     RowBox[{"D14", "::", "usage"}], "=", "\"\<D14 Kernel\>\""}], ";"}], 
-   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"Get", "[", 
      RowBox[{
       RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<globalvars.m\>\""}],
       "]"}], " ", ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Get", "[", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<util.m\>\""}], 
+     "]"}], " ", ";"}], "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{
-     RowBox[{"Get", "[", 
-      RowBox[{
-       RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<util.m\>\""}], 
-      "]"}], " ", ";"}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d1", "::", "usage"}], "=", "\"\<d1 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d2", "::", "usage"}], "=", "\"\<d2 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d3", "::", "usage"}], "=", "\"\<d3 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d4", "::", "usage"}], "=", "\"\<d4 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d5", "::", "usage"}], "=", "\"\<d5 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d6", "::", "usage"}], "=", "\"\<d6 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d7", "::", "usage"}], "=", "\"\<d7 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d8", "::", "usage"}], "=", "\"\<d8 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d9", "::", "usage"}], "=", "\"\<d9 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d10", "::", "usage"}], "=", "\"\<d10 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d11", "::", "usage"}], "=", "\"\<d11 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d12", "::", "usage"}], "=", "\"\<d12 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d13", "::", "usage"}], "=", "\"\<d13 Kernel\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"d14", "::", "usage"}], "=", "\"\<d14 Kernel\>\""}], ";"}], 
+    "*)"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
      RowBox[{"F2", "[", 
@@ -168,7 +155,7 @@ Cell[BoxData[
            RowBox[{
             RowBox[{"Norm", "[", "v1", "]"}], " ", 
             RowBox[{"Norm", "[", "v2", "]"}]}], ")"}]}], ")"}], "^", 
-        "2"}]}]}]}], ";"}], "\n", "\[IndentingNewLine]", 
+        "2"}]}]}]}], ";"}], "\[IndentingNewLine]", "\n", 
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
@@ -186,26 +173,26 @@ Cell[BoxData[
     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"D1", "[", 
+     RowBox[{"d1", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{"F2", "[", 
       RowBox[{"v1", ",", "v2"}], "]"}]}], ";"}], "\n", "\[IndentingNewLine]", 
    
    RowBox[{
     RowBox[{
-     RowBox[{"D2", "[", 
-      RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", "1"}], ";"}], "\n", 
-   "\[IndentingNewLine]", 
+     RowBox[{"d2", "[", 
+      RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", "1"}], ";"}], 
+   "\[IndentingNewLine]", "\n", 
    RowBox[{
     RowBox[{
-     RowBox[{"D3", "[", 
+     RowBox[{"d3", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{"S2", "[", 
       RowBox[{"v1", ",", "v2"}], "]"}]}], ";"}], "\n", "\[IndentingNewLine]", 
    
    RowBox[{
     RowBox[{
-     RowBox[{"D4", "[", 
+     RowBox[{"d4", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"(", 
@@ -227,10 +214,10 @@ Cell[BoxData[
           RowBox[{"[", "3", "]"}], "]"}], "/", 
          RowBox[{
           RowBox[{"Norm", "[", "v2", "]"}], "^", "2"}]}]}], ")"}]}]}], ";"}], 
-   "\n", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\n", 
    RowBox[{
     RowBox[{
-     RowBox[{"D5", "[", 
+     RowBox[{"d5", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{"(", 
       RowBox[{
@@ -296,7 +283,7 @@ Cell[BoxData[
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"D6", "[", 
+     RowBox[{"d6", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{"(", 
       RowBox[{
@@ -312,10 +299,10 @@ Cell[BoxData[
           RowBox[{"[", "3", "]"}], "]"}], "/", 
          RowBox[{
           RowBox[{"Norm", "[", "v2", "]"}], "^", "2"}]}], ")"}]}], ")"}]}], 
-    ";"}], "\n", "\[IndentingNewLine]", 
+    ";"}], "\[IndentingNewLine]", "\n", 
    RowBox[{
     RowBox[{
-     RowBox[{"D7", "[", 
+     RowBox[{"d7", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"S2", "[", 
@@ -337,7 +324,7 @@ Cell[BoxData[
      ";"}], "\n", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"D8", "[", 
+     RowBox[{"d8", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"(", 
@@ -386,10 +373,10 @@ Cell[BoxData[
              RowBox[{
               RowBox[{"Norm", "[", "v1", "]"}], " ", 
               RowBox[{"Norm", "[", "v2", "]"}]}], ")"}]}], ")"}], "^", 
-          "2"}]}]}], ")"}]}]}], ";"}], "\n", "\[IndentingNewLine]", 
+          "2"}]}]}], ")"}]}]}], ";"}], "\[IndentingNewLine]", "\n", 
    RowBox[{
     RowBox[{
-     RowBox[{"D9", "[", 
+     RowBox[{"d9", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{"(", 
       RowBox[{
@@ -468,7 +455,7 @@ Cell[BoxData[
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"D10", "[", 
+     RowBox[{"d10", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"(", 
@@ -482,10 +469,10 @@ Cell[BoxData[
           RowBox[{
            RowBox[{"Norm", "[", "v1", "]"}], " ", 
            RowBox[{"Norm", "[", "v2", "]"}]}], ")"}]}]}], ")"}], "^", "2"}]}],
-     ";"}], "\n", "\[IndentingNewLine]", 
+     ";"}], "\[IndentingNewLine]", "\n", 
    RowBox[{
     RowBox[{
-     RowBox[{"D11", "[", 
+     RowBox[{"d11", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"S2", "[", 
@@ -505,7 +492,7 @@ Cell[BoxData[
        "2"}]}]}], ";"}], "\n", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"D12", "[", 
+     RowBox[{"d12", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"(", 
@@ -567,10 +554,10 @@ Cell[BoxData[
             RowBox[{"[", "3", "]"}], "]"}], "^", "3"}], "/", 
           RowBox[{
            RowBox[{"Norm", "[", "v2", "]"}], "^", "4"}]}]}]}], ")"}]}]}], 
-    ";"}], "\n", "\[IndentingNewLine]", 
+    ";"}], "\[IndentingNewLine]", "\n", 
    RowBox[{
     RowBox[{
-     RowBox[{"D13", "[", 
+     RowBox[{"d13", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{
@@ -625,7 +612,7 @@ Cell[BoxData[
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{
-     RowBox[{"D14", "[", 
+     RowBox[{"d14", "[", 
       RowBox[{"v1_", ",", "v2_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{"(", 
@@ -664,20 +651,29 @@ Cell[BoxData[
              RowBox[{
               RowBox[{"Norm", "[", "v1", "]"}], " ", 
               RowBox[{"Norm", "[", "v2", "]"}]}], ")"}]}], ")"}], "^", 
-          "4"}]}]}], ")"}]}]}], ";"}], "\n", "\[IndentingNewLine]", 
+          "4"}]}]}], ")"}]}]}], ";"}], "\[IndentingNewLine]", "\n", 
    "\[IndentingNewLine]", 
    RowBox[{
-    RowBox[{"Dlist", "=", 
+    RowBox[{"dlist", "=", 
      RowBox[{"{", 
       RowBox[{
-      "D1", ",", "D2", ",", "D3", ",", "D4", ",", "D5", ",", "D6", ",", "D7", 
-       ",", "D8", ",", "D9", ",", "D10", ",", "D11", ",", "D12", ",", "D13", 
-       ",", "D14"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", "\[IndentingNewLine]", "\n", 
+      "d1", ",", "d2", ",", "d3", ",", "d4", ",", "d5", ",", "d6", ",", "d7", 
+       ",", "d8", ",", "d9", ",", "d10", ",", "d11", ",", "d12", ",", "d13", 
+       ",", "d14"}], "}"}]}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Dfunc", "[", 
+      RowBox[{"i_", ",", "k1_", ",", "k2_"}], "]"}], ":=", 
+     RowBox[{"Simplfunc", "[", 
+      RowBox[{
+       RowBox[{"dlist", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "[", 
+       RowBox[{"k1", ",", "k2"}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"End", "[", "]"}], " ", 
    RowBox[{"(*", 
-    RowBox[{"End", " ", "Private", " ", "Context"}], "*)"}], "\n", 
-   "\[IndentingNewLine]", 
+    RowBox[{"End", " ", "Private", " ", "Context"}], "*)"}], 
+   "\[IndentingNewLine]", "\n", 
    RowBox[{"EndPackage", "[", "]"}]}]}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.9289117986525927`*^9, 3.928911805819036*^9}, {
@@ -689,9 +685,11 @@ Cell[BoxData[
    3.928914923282399*^9, 3.928914930161084*^9}, {3.928916395869047*^9, 
    3.92891639652844*^9}, 3.928920066986141*^9, 3.928920243776329*^9, 
    3.928921850804837*^9, {3.928922109730669*^9, 3.9289221317260437`*^9}, {
-   3.928922277099698*^9, 3.928922277768742*^9}, 3.928922537260602*^9},
- CellLabel->
-  "In[796]:=",ExpressionUUID->"96c83c11-f63e-41fc-9a47-86c5eefe8cb0"],
+   3.928922277099698*^9, 3.928922277768742*^9}, 3.928922537260602*^9, 
+   3.929760435407181*^9, {3.929760496991234*^9, 3.9297606132795677`*^9}, {
+   3.929761183301083*^9, 
+   3.929761255556798*^9}},ExpressionUUID->"96c83c11-f63e-41fc-9a47-\
+86c5eefe8cb0"],
 
 Cell[BoxData["\<\"quadfcts`\"\>"], "Output",
  CellChangeTimes->{{3.9289120304899683`*^9, 3.928912072378468*^9}, {
@@ -752,11 +750,11 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 22720, 671, 2026, "Input",ExpressionUUID->"96c83c11-f63e-41fc-9a47-86c5eefe8cb0",
+Cell[580, 22, 22939, 669, 1985, "Input",ExpressionUUID->"96c83c11-f63e-41fc-9a47-86c5eefe8cb0",
  InitializationCell->True],
-Cell[23303, 695, 752, 11, 33, "Output",ExpressionUUID->"5ff24b79-6c2f-44e5-a4eb-e9b34c0e8573"],
-Cell[24058, 708, 758, 11, 33, "Output",ExpressionUUID->"4ef0b785-f437-485b-9c78-327ba9185de9"],
-Cell[24819, 721, 758, 11, 82, "Output",ExpressionUUID->"7fb93dd4-7c1b-4a96-b142-47d22eb1c9e1"]
+Cell[23522, 693, 752, 11, 33, "Output",ExpressionUUID->"5ff24b79-6c2f-44e5-a4eb-e9b34c0e8573"],
+Cell[24277, 706, 758, 11, 33, "Output",ExpressionUUID->"4ef0b785-f437-485b-9c78-327ba9185de9"],
+Cell[25038, 719, 758, 11, 33, "Output",ExpressionUUID->"7fb93dd4-7c1b-4a96-b142-47d22eb1c9e1"]
 }, Open  ]]
 }
 ]

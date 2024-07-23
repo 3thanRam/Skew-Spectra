@@ -27,17 +27,116 @@ reducebiases::usage="Get minimum number of biases";
 
 
 Begin["`Private`"]
+Get[NotebookDirectory[]<>"globalvars.m"] ;
+Get[NotebookDirectory[]<>"fftlogdiv.m"]; 
+
+runmakefile[]:=Module[{},
+comoutput="> /home3/ramsey/Wolfram\\\ Mathematica/tests/ctests/file.txt";
+commake="make -C /home3/ramsey/Wolfram\\\ Mathematica/randomrange";
+Run[commake];
+]
+
+numbTostring[numb_]:=If[MemberQ[{Infinity,-Infinity},numb],ToString[numb],ToString[numb//CForm]];
+
+getrange[equ0_]:=Module[{equ=equ0},
+equ=equ/.{LessEqual->Less,GreaterEqual->Greater};
+equ/.{a_<\[Nu]<b_:>{a,b},a_<\[Nu]:>{a,Infinity},\[Nu]>a_:>{a,Infinity},\[Nu]<b_:>{-Infinity,b},b_>\[Nu]:>{-Infinity,b}}
+]
 
 
-reducebiases[Aranges0_,Branges0_]:=Module[{Aranges=Aranges0,Branges=Branges0},
-biases={};
+setinifile[Ranges0_]:=Module[{Ranges=Ranges0},
 
-(*indices represent: [[(list index),AorB,Di,Mi]]*)
-(*maybe not AorB since I might sum them at the end*)
-UVdivs={};
-IRdivs={};
+inifile="/home3/ramsey/Wolfram\ Mathematica/randomrange/ranges.ini";
+n=Length[Ranges];
+P=ConstantArray[0,2n+1];
+P[[1]]={"N"->n};
+For[r=1,r<n+1,r++,
+{IRr,UVr}=Ranges[[r]];
+{IRa,IRb}=getrange[IRr];
+{UVa,UVb}=getrange[UVr];
+P[[2r]]={"ranges"<>ToString[r-1]<>"IR"->numbTostring[IRa]<>","<>numbTostring[IRb]};
+P[[2r+1]]={"ranges"<>ToString[r-1]<>"UV"->numbTostring[UVa]<>","<>numbTostring[UVb]}
+];
+inicontent=ExportString[<|"General"-><|P|>|>,"Ini"];
+WriteString[inifile,inicontent];
+Close[inifile];
+]
 
-{biases,IRdivs,UVdivs}
+runcode[n0_]:=Module[{n=n0},
+comrun="cd /home3/ramsey/Wolfram\\\ Mathematica/randomrange && ./Main";
+comrun =comrun<>comoutput;
+Run[comrun];
+file="/home3/ramsey/Wolfram\ Mathematica/tests/ctests/file.txt";
+output=Import[file];
+
+nuArr=ConstantArray[0,n];
+output=StringSplit[ReadString[file],"\n"];
+
+remLetEq[expr_]:=StringDelete["="][StringDelete[LetterCharacter..][expr]];
+Tonumber[expr_]:=Read[StringToStream[expr],Number];
+
+l1=remLetEq[output[[1]]];
+{Nc,Ndivs}=Tonumber[#]&/@StringTrim[StringSplit[l1,","]];
+
+For[i=1,i<n+1,i++,
+nuArr[[i]]=Tonumber[StringTrim[StringSplit[output[[i+1]],"="][[2]]]];
+];
+LDiv=ToExpression[StringReplace[remLetEq[output[[-1]]],{"["->"{","]"->"}"}]];
+{Nc,Ndivs,nuArr,LDiv}
+]
+
+reducebiases[SymM0_,unSymM0_]:=Module[{SymM=SymM0,unSymM=unSymM0},
+
+n=Length[SymM];
+
+tb0=AbsoluteTiming[
+symDivs=Table[Print[is,",",js];
+termij=UVIRbiases[SymM[[is,js]],"sym"],{is,n},{js,is}
+];
+symDivs=SymmetricMatrix[symDivs];
+
+symranges=symDivs[[All,All,1]];
+][[1]];
+
+Print["symDivs: ",tb0];
+
+tb1=AbsoluteTiming[
+unsymDivs=ParallelMap[UVIRbiases[#,"unsym"]&,unSymM,{2}];
+unsymranges=unsymDivs[[All,All,1]];
+][[1]];
+Print["unsymDivs: ",tb1];
+
+tb2=AbsoluteTiming[
+Ranges=Join[ArrayReshape[symranges,{n^2,2}],ArrayReshape[unsymranges,{n^2,2}]];
+][[1]];
+Print["Ranges: ",tb2];
+
+runmakefile[];
+tb3=AbsoluteTiming[
+setinifile[Ranges];
+][[1]];
+Print["setinifile: ",tb3];
+
+tb4=AbsoluteTiming[
+{Nc,Ndivs,biases,LDiv}=runcode[n];
+][[1]];
+Print["runcode: ",tb4];
+
+reducebiases[x0_,y0_,range0_]:=Module[{x=x0,y=y0,range=range0},
+If[LDiv[[x,y]]==0,0,range[[x,y,2]]]
+];
+
+tb5=AbsoluteTiming[
+SymDivergences=Table[divterm[i,j,symranges],{i,n},{j,n}];
+][[1]];
+Print["SymDivergences: ",tb5];
+
+tb6=AbsoluteTiming[
+UnSymDivergences=Table[divterm[i,j,unsymranges],{i,n},{j,n}];
+][[1]];
+Print["UnSymDivergences: ",tb6];
+
+{SymDivergences,UnSymDivergences,biases}
 ]
 
 

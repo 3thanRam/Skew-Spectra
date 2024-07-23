@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      4892,        130]
-NotebookOptionsPosition[      4177,        109]
-NotebookOutlinePosition[      4599,        126]
-CellTagsIndexPosition[      4556,        123]
+NotebookDataLength[      8090,        197]
+NotebookOptionsPosition[      7373,        176]
+NotebookOutlinePosition[      7794,        193]
+CellTagsIndexPosition[      7751,        190]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -33,14 +33,23 @@ Cell[BoxData[
    " ", 
    RowBox[{
     RowBox[{
-     RowBox[{"savefunc", "[", "M0_", "]"}], ":=", 
+     RowBox[{"savefunc", "[", 
+      RowBox[{
+      "SM0_", ",", "UnSM0_", ",", "Symdivergences0_", ",", 
+       "UnSymdivergences0_", ",", "biases0_"}], "]"}], ":=", 
      RowBox[{"Module", "[", 
       RowBox[{
        RowBox[{"{", 
-        RowBox[{"M", "=", "M0"}], "}"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"SM", "=", "SM0"}], ",", 
+         RowBox[{"UnSM", "=", "UnSM0"}], ",", 
+         RowBox[{"Symdivergences", "=", "Symdivergences0"}], ",", 
+         RowBox[{"UnSymdivergences", "=", "UnSymdivergences0"}], ",", 
+         RowBox[{"biases", "=", "biases0"}]}], "}"}], ",", 
+       "\[IndentingNewLine]", 
        RowBox[{
         RowBox[{"n", "=", 
-         RowBox[{"Length", "[", "M", "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"Length", "[", "SM", "]"}]}], ";", "\[IndentingNewLine]", 
         RowBox[{"fileName", "=", "\"\<savefile.txt\>\""}], ";", 
         "\[IndentingNewLine]", 
         RowBox[{"Export", "[", 
@@ -53,43 +62,101 @@ Cell[BoxData[
         "\[IndentingNewLine]", "\[IndentingNewLine]", 
         RowBox[{"For", "[", 
          RowBox[{
-          RowBox[{"i", "=", "1"}], ",", 
-          RowBox[{"i", "<", 
-           RowBox[{"n", "+", "1"}]}], ",", 
-          RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"b", "=", "1"}], ",", 
+          RowBox[{"b", "<", 
+           RowBox[{
+            RowBox[{"Length", "[", "biases", "]"}], "+", "1"}]}], ",", 
+          RowBox[{"b", "++"}], ",", "\[IndentingNewLine]", 
           RowBox[{
-           RowBox[{"datai", "=", 
-            RowBox[{
-             RowBox[{"Total", "[", 
-              RowBox[{"M", "[", 
-               RowBox[{"[", "i", "]"}], "]"}], "]"}], "/.", " ", 
-             RowBox[{"x_Integer", ":>", 
-              RowBox[{"N", "[", "x", "]"}]}]}]}], ";", "\[IndentingNewLine]", 
-           
            RowBox[{"tosave", "=", 
-            RowBox[{"\"\<Sn\>\"", "<>", 
-             RowBox[{"ToString", "[", "i", "]"}], "<>", "\"\<=\>\"", "<>", 
+            RowBox[{"\"\<nu\>\"", "<>", 
+             RowBox[{"ToString", "[", "b", "]"}], "<>", "\"\<=\>\"", "<>", 
              RowBox[{"ToString", "[", 
-              RowBox[{"CForm", "[", "datai", "]"}], "]"}], "<>", 
+              RowBox[{"CForm", "[", 
+               RowBox[{"biases", "[", 
+                RowBox[{"[", "b", "]"}], "]"}], "]"}], "]"}], "<>", 
              "\"\<;\>\""}]}], ";", "\[IndentingNewLine]", 
-           RowBox[{"Print", "[", "tosave", "]"}], ";", "\[IndentingNewLine]", 
-           
            RowBox[{"WriteString", "[", 
-            RowBox[{"file", ",", "tosave", ",", "\"\<\\n\>\""}], "]"}]}]}], 
-         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"file", ",", "tosave", ",", "\"\<\\n\>\""}], "]"}], 
+           ";"}]}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"saveMdata", "[", 
+          RowBox[{"dataname0_", ",", "datamatr0_"}], "]"}], ":=", 
+         RowBox[{"Module", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"dataname", "=", "dataname0"}], ",", 
+             RowBox[{"datamatr", "=", "datamatr0"}]}], "}"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"For", "[", 
+             RowBox[{
+              RowBox[{"i", "=", "1"}], ",", 
+              RowBox[{"i", "<", 
+               RowBox[{"n", "+", "1"}]}], ",", 
+              RowBox[{"i", "++"}], ",", 
+              RowBox[{
+               RowBox[{"For", "[", 
+                RowBox[{
+                 RowBox[{"j", "=", "1"}], ",", 
+                 RowBox[{"j", "<", 
+                  RowBox[{"n", "+", "1"}]}], ",", 
+                 RowBox[{"j", "++"}], ",", "\[IndentingNewLine]", 
+                 RowBox[{
+                  RowBox[{"datai", "=", 
+                   RowBox[{
+                    RowBox[{"datamatr", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"i", ",", "j"}], "]"}], "]"}], "/.", " ", 
+                    RowBox[{"x_Integer", ":>", 
+                    RowBox[{"N", "[", "x", "]"}]}]}]}], ";", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"term", "=", 
+                   RowBox[{"dataname", "<>", 
+                    RowBox[{"ToString", "[", "i", "]"}], "<>", "\"\<,\>\"", "<>", 
+                    RowBox[{"ToString", "[", "j", "]"}], "<>", 
+                    "\"\<]\>\""}]}], ";", "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"tosave", "=", 
+                   RowBox[{"term", "<>", "\"\<=\>\"", "<>", 
+                    RowBox[{"ToString", "[", 
+                    RowBox[{"CForm", "[", "datai", "]"}], "]"}], "<>", 
+                    "\"\<;\>\""}]}], ";", "\[IndentingNewLine]", 
+                  RowBox[{"WriteString", "[", 
+                   RowBox[{"file", ",", "tosave", ",", "\"\<\\n\>\""}], 
+                   "]"}]}]}], "\[IndentingNewLine]", "]"}], ";"}]}], "]"}], 
+            ";"}]}], "\[IndentingNewLine]", "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"saveMdata", "[", 
+         RowBox[{"\"\<Sym\>\"", ",", "SM"}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"saveMdata", "[", 
+         RowBox[{"\"\<UnSym\>\"", ",", "UnSM"}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"saveMdata", "[", 
+         RowBox[{"\"\<SymDivs\>\"", ",", "Symdivergences"}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"saveMdata", "[", 
+         RowBox[{"\"\<UnSymDivs\>\"", ",", "UnSymdivergences"}], "]"}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
         RowBox[{"Close", "[", "file", "]"}], ";"}]}], "\[IndentingNewLine]", 
       "]"}]}], ";"}], "\[IndentingNewLine]", " ", "\[IndentingNewLine]", 
    RowBox[{"End", "[", "]"}], " ", 
    RowBox[{"(*", 
-    RowBox[{"End", " ", "Private", " ", "Context"}], "*)"}], "\n", " ", 
-   "\[IndentingNewLine]", 
+    RowBox[{"End", " ", "Private", " ", "Context"}], "*)"}], 
+   "\[IndentingNewLine]", " ", "\n", 
    RowBox[{"EndPackage", "[", "]"}]}]}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.928922781131001*^9, 3.9289228122427187`*^9}, {
   3.928922857773096*^9, 3.928922931819728*^9}, {3.928922977382791*^9, 
-  3.928923026698432*^9}},
- CellLabel->
-  "In[917]:=",ExpressionUUID->"c85ae220-2e7f-484d-83ec-ac9a3365f0db"],
+  3.928923026698432*^9}, {3.9296149224105387`*^9, 3.929614997904499*^9}, {
+  3.929615049576499*^9, 3.9296151402247562`*^9}, {3.929615417140625*^9, 
+  3.929615430210005*^9}, {3.9296982808439827`*^9, 3.929698334019541*^9}, {
+  3.9296984239563026`*^9, 3.9296988856643257`*^9}, {3.9296989990142307`*^9, 
+  3.929699081111315*^9}},ExpressionUUID->"c85ae220-2e7f-484d-83ec-\
+ac9a3365f0db"],
 
 Cell[BoxData["\<\"savefcts`\"\>"], "Output",
  CellChangeTimes->{{3.928923067331491*^9, 3.928923068530805*^9}},
@@ -108,7 +175,7 @@ Cell[BoxData["\<\"savefcts`Private`\"\>"], "Output",
 }, Open  ]]
 },
 AutoGeneratedPackage->Automatic,
-WindowSize->{1386, 762},
+WindowSize->{693, 762},
 WindowMargins->{{0, Automatic}, {0, Automatic}},
 FrontEndVersion->"12.3 for Linux x86 (64-bit) (June 19, 2021)",
 StyleDefinitions->"Default.nb",
@@ -126,11 +193,11 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 2977, 69, 520, "Input",ExpressionUUID->"c85ae220-2e7f-484d-83ec-ac9a3365f0db",
+Cell[580, 22, 6173, 136, 850, "Input",ExpressionUUID->"c85ae220-2e7f-484d-83ec-ac9a3365f0db",
  InitializationCell->True],
-Cell[3560, 93, 193, 3, 33, "Output",ExpressionUUID->"99b8c427-b7a2-48df-90af-640e6f9c7bf0"],
-Cell[3756, 98, 201, 3, 33, "Output",ExpressionUUID->"6b4642f6-1175-4aff-a3c6-50b13209e353"],
-Cell[3960, 103, 201, 3, 82, "Output",ExpressionUUID->"de6b6c70-96ac-4074-9673-97d445bfda9b"]
+Cell[6756, 160, 193, 3, 33, "Output",ExpressionUUID->"99b8c427-b7a2-48df-90af-640e6f9c7bf0"],
+Cell[6952, 165, 201, 3, 33, "Output",ExpressionUUID->"6b4642f6-1175-4aff-a3c6-50b13209e353"],
+Cell[7156, 170, 201, 3, 33, "Output",ExpressionUUID->"de6b6c70-96ac-4074-9673-97d445bfda9b"]
 }, Open  ]]
 }
 ]
