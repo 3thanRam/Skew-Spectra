@@ -27,16 +27,14 @@ Simplfunc::usage="Simplify an expression";
 
 Begin["`Private`"]
 Get[NotebookDirectory[]<>"globalvars.m"] ;
-(*$Assumptions= k0>=0&&q0>=0&&kmq>=0&& 2 Pi>=phi>=0 && 1>=muk>=-1 && 1>=muq>=-1 && \[Epsilon] > 0&&{ k0,q0,muk, muq,phi, \[Epsilon],\[Nu]}\[Element]Reals;*)
 
+(*simplify an expression, write in terms of {q0,k0,kmq,muq,muk} & remove phi dependence *)
  Simplfunc[expr0_]:=Module[{exprini=expr0},
-(*Print[exprini];*)
 expr=exprini/. {Norm[k]^2->k0^2,Norm[q]^2->q0^2,Norm[k-q]^2->kmq^2,Sqrt[1-muk^2] Sqrt[1-muq^2] Sin[phi]->(-kmq^2+k0^2+q0^2)/(2 k0 q0)-muk muq};
-expr=Rationalize[Simplify[expr]]/. {Sin[phi]->(((-kmq^2+k0^2+q0^2)/(2 k0 q0))-muk muq)/(Sqrt[1-muk^2] Sqrt[1-muq^2])};
-Expand[Simplify[expr]]
+Rationalize[Simplify[expr]]/. {Sin[phi]->(((-kmq^2+k0^2+q0^2)/(2 k0 q0))-muk muq)/(Sqrt[1-muk^2] Sqrt[1-muq^2])} //Simplify//Expand
 ];
  
-End[] (*End Private Context*)
+End[] 
  
 EndPackage[]
 

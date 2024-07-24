@@ -26,12 +26,12 @@ BeginPackage["fftlogdiv`"]
 UVIRbiases::usage="Gives range for convergent IR and UV limit";
 
 Pk::usage="To be replaced by P(k0) when adding divergence";
-Pq::usage="To be replaced by integral over q0 of P(q0) when adding divergence";
+Pq::usage="To be replaced by integral over q0 of P(q0) (and any q0 dependent terms) when adding divergence";
 Begin["`Private`"]
 
 Get[NotebookDirectory[]<>"globalvars.m"] ;
 
-
+(*mathematica can often calculate an integral faster by first calculating the indefinite integration then taking the limit for the different bounds*)
 fastintegral[expr0_,var0_,a0_,b0_]:=Module[{expr=expr0,var=var0,a=a0,b=b0},
 indef=Integrate[expr,var];
 Ib=Quiet[Limit[indef,var->b,Direction->"FromBelow"]];
@@ -39,6 +39,8 @@ Ia=Quiet[Limit[indef,var->a,Direction->"FromAbove"]];
 Ib-Ia
 ];
 
+
+(*calculate the integration over muq and phi of the leading piece of an expression in UV and IR limit*)
 Clear[phimuintegratelimit]
 phimuintegratelimit[fct0_,limit0_]:=phimuintegratelimit[fct0,limit0]=Module[{fct=fct0,limit=limit0},
 q0k0replace=If[limit=="UV",{k0-> \[Epsilon] q0},{q0-> \[Epsilon] k0}];
@@ -52,20 +54,21 @@ expr =fastintegral[expr,muq,-1,1] //ExpandAll
 
 
 
-
+(*get behaviour of UV/IR limit in terms of \[Nu] in order to get a condition of divergence for \[Nu]*)
 Clear[integrandlimit]
 integrandlimit[fct0_,limit0_]:=integrandlimit[fct0,limit0]=Module[{fct=fct0,limit=limit0},
 epsreplace=If[limit=="UV",{\[Epsilon]-> k0/q0},{\[Epsilon]-> q0/k0}];
 Collect[Integrate[fct0,q0]/.epsreplace,q0] //Simplify
 ];
 
-
+(*get behaviour of UV/IR limit in order to get account for divergence of fftlog calculation *)
 Clear[Plimit]
 Plimit[fct0_,limit0_]:=Plimit[fct0,limit0]= Module[{fct=fct0,limit=limit0},
 epsreplace=If[limit=="UV",{\[Epsilon]-> k0/q0},{\[Epsilon]-> q0/k0}];
 1/(2\[Pi])^3 fct0/.epsreplace //Rationalize 
 ];
 
+(*split expression into powers of q0*)
 q0factor[v0_]:=Module[{v=v0},
 v=Expand[v];
 v=If[Head[v]===Plus,List@@v,{v}];
@@ -77,20 +80,22 @@ Tuniq=Flatten/@List@@@Normal@groupedSums;
 Simplify[Tuniq]
 ];
 
+(*get range of \[Nu] values where an expression could diverge*)
 singlebias[expr0_]:=Module[{expr=expr0},
 default=\[Nu]\[Element]Reals;
 {q0pow,coef}=expr[[{1,2}]];
-
 s=Quiet[Assuming[$Assumptions,Simplify@Solve[q0^q0pow==0,{q0,\[Nu]}]][[1]][[1]]];
 reg=If[ResourceFunction["EmptyQ"][s],default,If[s[[1]]==q0&&s[[2]][[1]]==0,Not[s[[2]][[2]]],default]]
 
 ];
 
-
+(*simplifies region with multiple possibly redundant constraints*) 
 reducedregion[regionconstraints0_]:=
 Assuming[$Assumptions, Reduce[Element[{\[Nu]},ImplicitRegion[Join[regionconstraints0,{\[Nu]\[Element]Reals}],{\[Nu]}]],\[Nu]]];
 
 extractnuterms:=DeleteCases[vi_/;FreeQ[vi,\[Nu]]==True];
+
+(*get power of k0/q0 of an expression *)
 vectpow[vect0_,expr0_]:=Module[{vect=vect0,expr=expr0},
 normexpr=If[expr==0,1,expr];
 expr=vect D[expr,vect]/normexpr ;
@@ -99,12 +104,14 @@ res=extractnuterms[expr];
 If[Length[res]==0,0,res[[1]]/\[Nu]]
 ];
 
+(*replace k0^nu (and q0^nu) by Pk (and Pq)*)
 replacePqPk[expr0_]:=Module[{expr=expr0},
 powPk=vectpow[k0,expr];
 powPq=vectpow[q0,expr];
 expr0 (Pk/k0^\[Nu])^powPk  (Pq/q0^\[Nu])^powPq  //Simplify
 ];
 
+(*get leading UV and IR divergent pieces and the ranges where its necessary to account for them *)
 UVIRbiases[expr0_,mode0_]:=Module[{expr=expr0,mode=mode0},
 Pl1=q0^\[Nu];
 Pl2=If[mode=="sym", Norm[k-q]^\[Nu],k0^\[Nu]];
@@ -121,12 +128,14 @@ corrections={replacePqPk[ Plimit[IRint,"IR"]],replacePqPk[ Plimit[UVint,"UV"]]};
 
 regionfct[d_]:=Block[{regionconstraints},
 regionconstraints=Array[singlebias[q0fact[[d]][[#]]]&,Length[q0fact[[d]]]];
+(*{divergence range, divergent piece}*)
 {reducedregion[regionconstraints],corrections[[d]]}
 ];
 
+(*IR,UV divergence information*)
 {regionfct[1],regionfct[2]}
 ]
-End[] (*End Private Context*)
+End[] 
 EndPackage[]
 
 

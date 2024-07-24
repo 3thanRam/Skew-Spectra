@@ -30,6 +30,7 @@ Get[NotebookDirectory[]<>"losintegrals.m"] ;
 delta[x_,y_]/;(Order[x,y]<0):=delta[y,x];
 delta[x_,x_]:=1;
 
+(*get line of sight function by letter index and order*)
 getFunction[letter_,n_]:=Module[{functionName},functionName=ToExpression[ToString[letter]<>ToString[n]]]
 numberToLetter[n_]:=FromCharacterCode[64+n]
 
@@ -42,6 +43,8 @@ terms=If[Head[expr]===Plus,List@@expr,{expr}];
 numTerms=Length[terms];
 dividedExpr=expr/numTerms]
 
+
+(*returns an expression with a given number of delta functions and products of k with different indices*)
 Deltak[n0_,nD0_,nk0_]:=Module[{n=n0,nD=nD0,nk=nk0},
 expr=1;
 expr*=Product[delta[numberToLetter[2 id+1],numberToLetter[2 id+2]],{id,0,nD-1}];
@@ -51,7 +54,7 @@ If[n>2 && nD>0,perms=Simplify[sumOverPermutations[expr,Table[numberToLetter[i],{
 expr
 ]
 
-
+(*get the expression of the line of sight integral of a given order*)
 losint[n10_,n20_,n30_]:=Module[{n1=n10,n2=n20,n3=n30},
 Vars=Table[getFunction[numberToLetter[i0+1],n3] ,{i0,0,Quotient[n3,2]}];
 res=k0^(3-2(n1+n2));
@@ -60,8 +63,7 @@ S=S/.{K[x_]:>k[[3]],delta[x_,y_]:>1,getFunction[numberToLetter[1],0]->I2[n1,n2]}
 For[v=1,v<Length[Vars]+1,v++,
 S=S/.{Vars[[v]]->Vars[[v]][n1,n2]};
 ];
-res*=S;
-Simplify[res]
+res*=S //Simplify
 ]
 
 End[] (*End Private Context*)

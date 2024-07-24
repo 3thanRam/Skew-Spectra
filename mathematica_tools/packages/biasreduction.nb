@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     22128,        553]
-NotebookOptionsPosition[     21402,        532]
-NotebookOutlinePosition[     21827,        549]
-CellTagsIndexPosition[     21784,        546]
+NotebookDataLength[     23451,        583]
+NotebookOptionsPosition[     22722,        562]
+NotebookOutlinePosition[     23150,        579]
+CellTagsIndexPosition[     23107,        576]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -44,19 +44,23 @@ Cell[BoxData[{
     "]"}], ";"}], " ", "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
+   RowBox[{"mydirectory", "=", 
+    RowBox[{
+     RowBox[{"ParentDirectory", "[", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "2"}], "]"}], "<>", 
+     "\"\</randomrange\>\""}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
    RowBox[{"runmakefile", "[", "]"}], ":=", 
    RowBox[{"Module", "[", 
     RowBox[{
      RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
      RowBox[{
-      RowBox[{
-      "comoutput", "=", 
-       "\"\<> /home3/ramsey/Wolfram\\\\\\ Mathematica/tests/ctests/file.txt\>\
-\""}], ";", "\[IndentingNewLine]", 
-      RowBox[{
-      "commake", "=", 
-       "\"\<make -C /home3/ramsey/Wolfram\\\\\\ \
-Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{"commake", "=", 
+       RowBox[{"\"\<make -C \>\"", "<>", "mydirectory"}]}], ";", 
+      "\[IndentingNewLine]", 
       RowBox[{"Run", "[", "commake", "]"}], ";"}]}], "\[IndentingNewLine]", 
     "]"}]}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -125,10 +129,9 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
       RowBox[{"Ranges", "=", "Ranges0"}], "}"}], ",", "\[IndentingNewLine]", 
      "\[IndentingNewLine]", 
      RowBox[{
-      RowBox[{
-      "inifile", "=", 
-       "\"\</home3/ramsey/Wolfram\\ Mathematica/randomrange/ranges.ini\>\""}],
-       ";", "\[IndentingNewLine]", 
+      RowBox[{"inifile", "=", 
+       RowBox[{"mydirectory", "<>", "\"\</ranges.ini\>\""}]}], ";", 
+      "\[IndentingNewLine]", 
       RowBox[{"n", "=", 
        RowBox[{"Length", "[", "Ranges", "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"P", "=", 
@@ -209,17 +212,16 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
      RowBox[{"{", 
       RowBox[{"n", "=", "n0"}], "}"}], ",", "\[IndentingNewLine]", 
      RowBox[{
-      RowBox[{
-      "comrun", "=", 
-       "\"\<cd /home3/ramsey/Wolfram\\\\\\ Mathematica/randomrange && \
-./Main\>\""}], ";", "\[IndentingNewLine]", 
+      RowBox[{"comrun", "=", 
+       RowBox[{
+       "\"\<cd \>\"", "<>", "mydirectory", "<>", "\"\< && ./Main\>\""}]}], 
+      ";", "\[IndentingNewLine]", 
       RowBox[{"comrun", " ", "=", 
        RowBox[{"comrun", "<>", "comoutput"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"Run", "[", "comrun", "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{
-      "file", "=", 
-       "\"\</home3/ramsey/Wolfram\\ Mathematica/tests/ctests/file.txt\>\""}], 
-      ";", "\[IndentingNewLine]", 
+      RowBox[{"file", "=", 
+       RowBox[{"mydirectory", "<>", "\"\</file.txt\>\""}]}], ";", 
+      "\[IndentingNewLine]", 
       RowBox[{"output", "=", 
        RowBox[{"Import", "[", "file", "]"}]}], ";", "\[IndentingNewLine]", 
       "\[IndentingNewLine]", 
@@ -313,6 +315,21 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
       RowBox[{"n", "=", 
        RowBox[{"Length", "[", "SymM", "]"}]}], ";", "\[IndentingNewLine]", 
       "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"get", " ", "matrix", " ", "of", " ", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"IRdivergence", " ", "range"}], ",", " ", 
+            RowBox[{"IRdivergent", " ", "piece"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"UVdivergence", " ", "range"}], ",", " ", 
+            RowBox[{"UVdivergent", " ", "piece"}]}], "}"}]}], "}"}], " ", 
+        "for", " ", "each", " ", "element", " ", "of", " ", "SymM", 
+        "\[IndentingNewLine]", "Very", " ", "slow"}], "\[IndentingNewLine]", 
+       "*)"}], "\[IndentingNewLine]", 
       RowBox[{"tb0", "=", 
        RowBox[{
         RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
@@ -324,13 +341,12 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
               RowBox[{"Print", "[", 
                RowBox[{"is", ",", "\"\<,\>\"", ",", "js"}], "]"}], ";", 
               "\[IndentingNewLine]", 
-              RowBox[{"termij", "=", 
-               RowBox[{"UVIRbiases", "[", 
-                RowBox[{
-                 RowBox[{"SymM", "[", 
-                  RowBox[{"[", 
-                   RowBox[{"is", ",", "js"}], "]"}], "]"}], ",", 
-                 "\"\<sym\>\""}], "]"}]}]}], ",", 
+              RowBox[{"UVIRbiases", "[", 
+               RowBox[{
+                RowBox[{"SymM", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"is", ",", "js"}], "]"}], "]"}], ",", 
+                "\"\<sym\>\""}], "]"}]}], ",", 
              RowBox[{"{", 
               RowBox[{"is", ",", "n"}], "}"}], ",", 
              RowBox[{"{", 
@@ -349,6 +365,10 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
       RowBox[{"Print", "[", 
        RowBox[{"\"\<symDivs: \>\"", ",", "tb0"}], "]"}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+       "do", " ", "the", " ", "same", " ", "for", " ", "unsymmetric", " ", 
+        "part"}], "*)"}], "\[IndentingNewLine]", 
       RowBox[{"tb1", "=", 
        RowBox[{
         RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
@@ -370,6 +390,9 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
       RowBox[{"Print", "[", 
        RowBox[{"\"\<unsymDivs: \>\"", ",", "tb1"}], "]"}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{"collect", " ", "all", " ", "ranges", " ", "together"}], 
+       "*)"}], "\[IndentingNewLine]", 
       RowBox[{"tb2", "=", 
        RowBox[{
         RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
@@ -393,6 +416,7 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
        RowBox[{"\"\<Ranges: \>\"", ",", "tb2"}], "]"}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
       RowBox[{"runmakefile", "[", "]"}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
       RowBox[{"tb3", "=", 
        RowBox[{
         RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
@@ -403,6 +427,18 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
       RowBox[{"Print", "[", 
        RowBox[{"\"\<setinifile: \>\"", ",", "tb3"}], "]"}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{
+        "get", " ", "number", " ", "of", " ", "different", " ", "fftlog", " ",
+          "biases"}], ",", " ", 
+        RowBox[{
+        "corresponding", " ", "number", " ", "of", " ", "divergences", " ", 
+         "to", " ", "account", " ", "for"}], ",", " ", 
+        RowBox[{
+        "the", " ", "values", " ", "of", " ", "the", " ", "biases", " ", 
+         "and", " ", "the", " ", "necessary", " ", "divergent", " ", 
+         "pieces"}]}], "*)"}], "\[IndentingNewLine]", 
       RowBox[{"tb4", "=", 
        RowBox[{
         RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
@@ -418,7 +454,7 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
        RowBox[{"\"\<runcode: \>\"", ",", "tb4"}], "]"}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
       RowBox[{
-       RowBox[{"reducebiases", "[", 
+       RowBox[{"divterm", "[", 
         RowBox[{"x0_", ",", "y0_", ",", "range0_"}], "]"}], ":=", 
        RowBox[{"Module", "[", 
         RowBox[{
@@ -440,6 +476,11 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
              RowBox[{"x", ",", "y", ",", "2"}], "]"}], "]"}]}], "]"}]}], 
         "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
       "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+       "separate", " ", "divergent", " ", "pieces", " ", "into", " ", 
+        "symmetric", " ", "and", " ", "unsymmetric", " ", "parts"}], "*)"}], 
+      "\[IndentingNewLine]", 
       RowBox[{"tb5", "=", 
        RowBox[{
         RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
@@ -452,16 +493,8 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
              RowBox[{"{", 
               RowBox[{"i", ",", "n"}], "}"}], ",", 
              RowBox[{"{", 
-              RowBox[{"j", ",", "n"}], "}"}]}], "]"}]}], ";"}], 
-         "\[IndentingNewLine]", "]"}], "[", 
-        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Print", "[", 
-       RowBox[{"\"\<SymDivergences: \>\"", ",", "tb5"}], "]"}], ";", 
-      "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"tb6", "=", 
-       RowBox[{
-        RowBox[{"AbsoluteTiming", "[", "\[IndentingNewLine]", 
-         RowBox[{
+              RowBox[{"j", ",", "n"}], "}"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
           RowBox[{"UnSymDivergences", "=", 
            RowBox[{"Table", "[", 
             RowBox[{
@@ -474,17 +507,14 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
          "\[IndentingNewLine]", "]"}], "[", 
         RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"Print", "[", 
-       RowBox[{"\"\<UnSymDivergences: \>\"", ",", "tb6"}], "]"}], ";", 
+       RowBox[{"\"\<get divergences: \>\"", ",", "tb5"}], "]"}], ";", 
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
       RowBox[{"{", 
        RowBox[{"SymDivergences", ",", "UnSymDivergences", ",", "biases"}], 
        "}"}]}]}], "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
-  "\[IndentingNewLine]", "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"End", "[", "]"}], " ", 
-  RowBox[{"(*", 
-   RowBox[{"End", " ", "Private", " ", "Context"}], "*)"}], 
-  "\n"}], "\[IndentingNewLine]", 
+  RowBox[{"End", "[", "]"}], "\[IndentingNewLine]"}], "\n", 
  RowBox[{"EndPackage", "[", "]"}]}], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.929096090561938*^9, 3.9290961220409603`*^9}, {
@@ -510,8 +540,8 @@ Mathematica/randomrange\>\""}], ";", "\[IndentingNewLine]",
    3.9304854682099953`*^9, 3.9304856686338587`*^9}, {3.9304857190065107`*^9, 
    3.930485742409354*^9}, {3.9305625262292*^9, 3.930562578566914*^9}, 
    3.9305626132151327`*^9, {3.930562857359819*^9, 3.930562861043522*^9}, {
-   3.930563084500705*^9, 
-   3.9305631047681427`*^9}},ExpressionUUID->"ae748886-cad4-4e7c-931b-\
+   3.930563084500705*^9, 3.930563104768142*^9}, {3.930815654357648*^9, 
+   3.9308156765820436`*^9}},ExpressionUUID->"ae748886-cad4-4e7c-931b-\
 6645db5761c0"],
 
 Cell[BoxData["\<\"biasreduction`\"\>"], "Output",
@@ -531,8 +561,8 @@ Cell[BoxData["\<\"biasreduction`Private`\"\>"], "Output",
 }, Open  ]]
 },
 AutoGeneratedPackage->Automatic,
-WindowSize->{693, 762},
-WindowMargins->{{Automatic, 0}, {0, Automatic}},
+WindowSize->{693.75, 762},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"14.0 for Linux x86 (64-bit) (December 12, 2023)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"1f33e03e-a197-42e7-9ff9-ea09e5150ba5"
@@ -549,11 +579,11 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 20185, 492, 2776, "Input",ExpressionUUID->"ae748886-cad4-4e7c-931b-6645db5761c0",
+Cell[580, 22, 21505, 522, 2879, "Input",ExpressionUUID->"ae748886-cad4-4e7c-931b-6645db5761c0",
  InitializationCell->True],
-Cell[20768, 516, 198, 3, 33, "Output",ExpressionUUID->"0ac1b5ea-22b4-4983-9c7f-808cf9365148"],
-Cell[20969, 521, 206, 3, 33, "Output",ExpressionUUID->"3a637fce-fc0d-49f1-94d7-2ce8b13f2fab"],
-Cell[21178, 526, 208, 3, 33, "Output",ExpressionUUID->"c61a337f-b43d-4b10-8be6-4d91e4a105b0"]
+Cell[22088, 546, 198, 3, 33, "Output",ExpressionUUID->"0ac1b5ea-22b4-4983-9c7f-808cf9365148"],
+Cell[22289, 551, 206, 3, 33, "Output",ExpressionUUID->"3a637fce-fc0d-49f1-94d7-2ce8b13f2fab"],
+Cell[22498, 556, 208, 3, 33, "Output",ExpressionUUID->"c61a337f-b43d-4b10-8be6-4d91e4a105b0"]
 }, Open  ]]
 }
 ]

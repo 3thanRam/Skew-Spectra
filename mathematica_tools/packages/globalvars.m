@@ -23,14 +23,14 @@
 
 BeginPackage["fftlogdiv`"]
 
-k::usage="vector k";
+k::usage="external momentum vector k";
 k0::usage="Length of k";
 muk::usage="cosine of k.z";
 
-q::usage="vector q";
+q::usage="internal momentum vector q";
 q0::usage="Length of q";
 muq::usage="cosine of q.z";
-phi::usage="last angle";
+phi::usage="azimuthal angle";
 
 kmq::usage="Norm of k-q";
 
@@ -42,7 +42,7 @@ Begin["`Private`"]
 $Assumptions= k0>=0&&q0>=0&&kmq>=0&& 2 Pi>=phi>=0 && 1>=muk>=-1 && 1>=muq>=-1 && \[Epsilon] > 0&&{ k0,q0,muk, muq,phi, \[Epsilon],\[Nu]}\[Element]Reals;
 k={0,k0 Sqrt[1-muk^2],k0 muk};
 q={q0 Sqrt[1-muq^2] Cos[phi],q0 Sqrt[1-muq^2] Sin[phi],q0 muq};
-End[] (*End Private Context*)
+End[] 
 
 EndPackage[]
 

@@ -26,7 +26,10 @@ BeginPackage["savefcts`"]
 savefunc::usage=" save results";
 
 Begin["`Private`"]
- savefunc[SM0_,UnSM0_,Symdivergences0_,UnSymdivergences0_,biases0_]:=Module[{SM=SM0,UnSM=UnSM0,Symdivergences=Symdivergences0,UnSymdivergences=UnSymdivergences0,biases=biases0},
+
+(*Save output in a format that's easy to use in C code*)
+
+savefunc[SM0_,UnSM0_,Symdivergences0_,UnSymdivergences0_,biases0_]:=Module[{SM=SM0,UnSM=UnSM0,Symdivergences=Symdivergences0,UnSymdivergences=UnSymdivergences0,biases=biases0},
 n=Length[SM];
 fileName="savefile.txt";
 Export[fileName,""];
@@ -54,7 +57,7 @@ saveMdata["UnSymDivs",UnSymdivergences];
 Close[file];
 ];
  
-End[] (*End Private Context*)
+End[] 
  
 EndPackage[]
 

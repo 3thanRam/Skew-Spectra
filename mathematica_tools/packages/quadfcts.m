@@ -25,64 +25,52 @@ BeginPackage["quadfcts`"]
 
 F2::usage="F2 Kernel";
 G2::usage="G2 Kernel";
-S2::usage="G2 Kernel";
+S2::usage="S2 Kernel";
 Dfunc::usage="Array of d Kernels";
 
 Begin["`Private`"]
 Get[NotebookDirectory[]<>"globalvars.m"] ;
 Get[NotebookDirectory[]<>"util.m"] ;
-(*d1::usage="d1 Kernel";
-d2::usage="d2 Kernel";
-d3::usage="d3 Kernel";
-d4::usage="d4 Kernel";
-d5::usage="d5 Kernel";
-d6::usage="d6 Kernel";
-d7::usage="d7 Kernel";
-d8::usage="d8 Kernel";
-d9::usage="d9 Kernel";
-d10::usage="d10 Kernel";
-d11::usage="d11 Kernel";
-d12::usage="d12 Kernel";
-d13::usage="d13 Kernel";
-d14::usage="d14 Kernel";*)
+
 F2[v1_,v2_]:=5/7+0.5 Dot[v1,v2] (1/Norm[v1]^2+1/Norm[v2]^2)+(2/7) (Dot[v1,v2]/(Norm[v1] Norm[v2]))^2;
 
 G2[v1_,v2_]:=3/7+0.5 Dot[v1,v2] (1/Norm[v1]^2+1/Norm[v2]^2)+(4/7) (Dot[v1,v2]/(Norm[v1] Norm[v2]))^2;
 
-
 S2[v1_,v2_]:=(Dot[v1,v2]/Norm[v1] Norm[v2])^2-1;
 
-d1[v1_,v2_]:=F2[v1,v2];
+(* Decomposition of Bi-spectrum into 14 quadratic operators following https://arxiv.org/pdf/2010.14267 without cosmological biases*)
+d1[v1_,v2_]:=2F2[v1,v2];
 
 d2[v1_,v2_]:=1;
 
-d3[v1_,v2_]:=S2[v1,v2];
+d3[v1_,v2_]:=2S2[v1,v2];
 
-d4[v1_,v2_]:=(-v1[[3]]-v2[[3]]) (v1[[3]]/Norm[v1]^2+v2[[3]]/Norm[v2]^2);
+d4[v1_,v2_]:=(v1[[3]]+v2[[3]])/2 (v1[[3]]/Norm[v1]^2+v2[[3]]/Norm[v2]^2);
 
-d5[v1_,v2_]:=(F2[v1,v2] ((v1[[3]]/Norm[v1])^2+(v2[[3]]/Norm[v2]^2))+(-v1[[3]]-v2[[3]])^2/(Sqrt[(-v1[[1]]-v2[[1]])^2+(-v1[[2]]-v2[[2]])^2+(-v1[[3]]-v2[[3]])^2]^2) G2[v1,v2]);
+d5[v1_,v2_]:=2(F2[v1,v2] ((v1[[3]]/Norm[v1])^2+(v2[[3]]/Norm[v2]^2))+(-v1[[3]]-v2[[3]])^2/(Sqrt[(-v1[[1]]-v2[[1]])^2+(-v1[[2]]-v2[[2]])^2+(-v1[[3]]-v2[[3]])^2]^2) G2[v1,v2]);
 
 d6[v1_,v2_]:=((v1[[3]]/Norm[v1])^2+(v2[[3]]/Norm[v2]^2));
 
-d7[v1_,v2_]:=S2[v1,v2] ((v1[[3]]/Norm[v1])^2+(v2[[3]]/Norm[v2]^2));
+d7[v1_,v2_]:=2S2[v1,v2] ((v1[[3]]/Norm[v1])^2+(v2[[3]]/Norm[v2]^2));
 
-d8[v1_,v2_]:=(-v1[[3]]-v2[[3]]) (v1[[3]]^3/Norm[v1]^4+v2[[3]]^3/Norm[v2]^4+2 v1[[3]] (v2[[3]]/(Norm[v1] Norm[v2]))^2+2 v2[[3]] (v1[[3]]/(Norm[v1] Norm[v2]))^2);
+d8[v1_,v2_]:=(v1[[3]]+v2[[3]])/2 (v1[[3]]^3/Norm[v1]^4+v2[[3]]^3/Norm[v2]^4+2 v1[[3]] (v2[[3]]/(Norm[v1] Norm[v2]))^2+2 v2[[3]] (v1[[3]]/(Norm[v1] Norm[v2]))^2);
 
 d9[v1_,v2_]:=((v1[[3]] v2[[3]]/(Norm[v1] Norm[v2]))^2 F2[v1,v2]+((v1[[3]]/Norm[v1])^2+(v2[[3]]/Norm[v2])^2) ((-v1[[3]]-v2[[3]])/(Sqrt[(-v1[[1]]-v2[[1]])^2+(-v1[[2]]-v2[[2]])^2+(-v1[[3]]-v2[[3]])^2]))^2 G2[v1,v2]);
 
 d10[v1_,v2_]:=(v1[[3]] v2[[3]]/(Norm[v1] Norm[v2]))^2;
 
-d11[v1_,v2_]:=S2[v1,v2] (v1[[3]] v2[[3]]/(Norm[v1] Norm[v2]))^2;
+d11[v1_,v2_]:=2S2[v1,v2] (v1[[3]] v2[[3]]/(Norm[v1] Norm[v2]))^2;
 
-d12[v1_,v2_]:=(-v1[[3]]-v2[[3]]) ((v1[[3]]/Norm[v1])^4 v2[[3]]/Norm[v2]^2+(v2[[3]]/Norm[v2])^4 v1[[3]]/Norm[v1]^2+2 (v2[[3]]/Norm[v2])^2 v1[[3]]^3/Norm[v1]^4+2 (v1[[3]]/Norm[v1])^2 v2[[3]]^3/Norm[v2]^4);
+d12[v1_,v2_]:=(v1[[3]]+v2[[3]])/2 ((v1[[3]]/Norm[v1])^4 v2[[3]]/Norm[v2]^2+(v2[[3]]/Norm[v2])^4 v1[[3]]/Norm[v1]^2+2 (v2[[3]]/Norm[v2])^2 v1[[3]]^3/Norm[v1]^4+2 (v1[[3]]/Norm[v1])^2 v2[[3]]^3/Norm[v2]^4);
 
 d13[v1_,v2_]:=((v1[[3]] v2[[3]] (-v1[[3]]-v2[[3]]))/(Norm[v1] Norm[v2] Sqrt[(-v1[[1]]-v2[[1]])^2+(-v1[[2]]-v2[[2]])^2+(-v1[[3]]-v2[[3]])^2]))^2 G2[v1,v2];
 
-d14[v1_,v2_]:=(-v1[[3]]-v2[[3]]) (v1[[3]]^3 (v2[[3]]/(Norm[v1] Norm[v2]))^4+v2[[3]]^3 (v1[[3]]/(Norm[v1] Norm[v2]))^4);
+d14[v1_,v2_]:=(v1[[3]]+v2[[3]])/2 (v1[[3]]^3 (v2[[3]]/(Norm[v1] Norm[v2]))^4+v2[[3]]^3 (v1[[3]]/(Norm[v1] Norm[v2]))^4);
 
 
 dlist={d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14};
 
+(*function to call the quadratic operators*)
 Dfunc[i_,k1_,k2_]:=Simplfunc[dlist[[i]][k1,k2]];
 
 End[] (*End Private Context*)

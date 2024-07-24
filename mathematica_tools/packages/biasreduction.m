@@ -30,9 +30,10 @@ Begin["`Private`"]
 Get[NotebookDirectory[]<>"globalvars.m"] ;
 Get[NotebookDirectory[]<>"fftlogdiv.m"]; 
 
+mydirectory=ParentDirectory[NotebookDirectory[],2]<>"/randomrange";
+
 runmakefile[]:=Module[{},
-comoutput="> /home3/ramsey/Wolfram\\\ Mathematica/tests/ctests/file.txt";
-commake="make -C /home3/ramsey/Wolfram\\\ Mathematica/randomrange";
+commake="make -C "<>mydirectory;
 Run[commake];
 ]
 
@@ -46,7 +47,7 @@ equ/.{a_<\[Nu]<b_:>{a,b},a_<\[Nu]:>{a,Infinity},\[Nu]>a_:>{a,Infinity},\[Nu]<b_:
 
 setinifile[Ranges0_]:=Module[{Ranges=Ranges0},
 
-inifile="/home3/ramsey/Wolfram\ Mathematica/randomrange/ranges.ini";
+inifile=mydirectory<>"/ranges.ini";
 n=Length[Ranges];
 P=ConstantArray[0,2n+1];
 P[[1]]={"N"->n};
@@ -63,10 +64,10 @@ Close[inifile];
 ]
 
 runcode[n0_]:=Module[{n=n0},
-comrun="cd /home3/ramsey/Wolfram\\\ Mathematica/randomrange && ./Main";
+comrun="cd "<>mydirectory<>" && ./Main";
 comrun =comrun<>comoutput;
 Run[comrun];
-file="/home3/ramsey/Wolfram\ Mathematica/tests/ctests/file.txt";
+file=mydirectory<>"/file.txt";
 output=Import[file];
 
 nuArr=ConstantArray[0,n];
@@ -89,9 +90,12 @@ reducebiases[SymM0_,unSymM0_]:=Module[{SymM=SymM0,unSymM=unSymM0},
 
 n=Length[SymM];
 
+(*get matrix of {{IRdivergence range, IRdivergent piece},{UVdivergence range, UVdivergent piece}} for each element of SymM
+Very slow
+*)
 tb0=AbsoluteTiming[
 symDivs=Table[Print[is,",",js];
-termij=UVIRbiases[SymM[[is,js]],"sym"],{is,n},{js,is}
+UVIRbiases[SymM[[is,js]],"sym"],{is,n},{js,is}
 ];
 symDivs=SymmetricMatrix[symDivs];
 
@@ -100,48 +104,48 @@ symranges=symDivs[[All,All,1]];
 
 Print["symDivs: ",tb0];
 
+(*do the same for unsymmetric part*)
 tb1=AbsoluteTiming[
 unsymDivs=ParallelMap[UVIRbiases[#,"unsym"]&,unSymM,{2}];
 unsymranges=unsymDivs[[All,All,1]];
 ][[1]];
 Print["unsymDivs: ",tb1];
 
+(*collect all ranges together*)
 tb2=AbsoluteTiming[
 Ranges=Join[ArrayReshape[symranges,{n^2,2}],ArrayReshape[unsymranges,{n^2,2}]];
 ][[1]];
 Print["Ranges: ",tb2];
 
 runmakefile[];
+
 tb3=AbsoluteTiming[
 setinifile[Ranges];
 ][[1]];
 Print["setinifile: ",tb3];
 
+(*get number of different fftlog biases, corresponding number of divergences to account for, the values of the biases and the necessary divergent pieces*)
 tb4=AbsoluteTiming[
 {Nc,Ndivs,biases,LDiv}=runcode[n];
 ][[1]];
 Print["runcode: ",tb4];
 
-reducebiases[x0_,y0_,range0_]:=Module[{x=x0,y=y0,range=range0},
+divterm[x0_,y0_,range0_]:=Module[{x=x0,y=y0,range=range0},
 If[LDiv[[x,y]]==0,0,range[[x,y,2]]]
 ];
 
+(*separate divergent pieces into symmetric and unsymmetric parts*)
 tb5=AbsoluteTiming[
 SymDivergences=Table[divterm[i,j,symranges],{i,n},{j,n}];
-][[1]];
-Print["SymDivergences: ",tb5];
-
-tb6=AbsoluteTiming[
 UnSymDivergences=Table[divterm[i,j,unsymranges],{i,n},{j,n}];
 ][[1]];
-Print["UnSymDivergences: ",tb6];
+Print["get divergences: ",tb5];
 
 {SymDivergences,UnSymDivergences,biases}
 ]
 
 
-
-End[] (*End Private Context*)
+End[]
 
 EndPackage[]
 

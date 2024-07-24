@@ -34,6 +34,8 @@ Get[NotebookDirectory[]<>"util.m"];
 Get[NotebookDirectory[]<>"losintegrals.m"];
 Get[NotebookDirectory[]<>"losintcalcs.m"];
 
+(*decompose an expression into powers of k0,q0,kmq,muk,muq 
+then get result of integration using master and line of sight integrals using the losint function from losintcalcs.m *)
 q0kmqmuqdecomp[v0_]:=Module[{v=v0},
 v=Expand[Simplfunc[v]];
 (*v=If[Head[v]===Plus,List@@v,{v}];*)
@@ -45,10 +47,10 @@ Tuniq=Flatten/@List@@@Normal@groupedSums;
 
 res=Sum[ Tuniq[[m,4]] losint[-(Tuniq[[m,1]]-Tuniq[[m,3]])/2+n1, -Tuniq[[m,2]]/2+n2,Tuniq[[m,3]]],{m,1,Length[Tuniq]}];
 
-res=Collect[res,muk]
+Collect[res,muk]
 ]
 
-End[] (*End Private Context*)
+End[] 
 
 EndPackage[]
 
