@@ -26,7 +26,7 @@ BeginPackage["savefcts`"]
 savefunc::usage=" save results";
 
 Begin["`Private`"]
-
+Get[NotebookDirectory[]<>"globalvars.m"] ;
 (*Save output in a format that's easy to use in C code*)
 
 savefunc[SM0_,UnSM0_,Symdivergences0_,UnSymdivergences0_,biases0_]:=Module[{SM=SM0,UnSM=UnSM0,Symdivergences=Symdivergences0,UnSymdivergences=UnSymdivergences0,biases=biases0},

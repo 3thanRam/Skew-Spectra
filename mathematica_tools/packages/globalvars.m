@@ -21,7 +21,7 @@
 
 (* ::Input::Initialization:: *)
 
-BeginPackage["fftlogdiv`"]
+BeginPackage["globalvars`"]
 
 k::usage="external momentum vector k";
 k0::usage="Length of k";
@@ -39,9 +39,10 @@ kmq::usage="Norm of k-q";
 $Assumptions::usage="Assumptions";
 
 Begin["`Private`"]
-$Assumptions= k0>=0&&q0>=0&&kmq>=0&& 2 Pi>=phi>=0 && 1>=muk>=-1 && 1>=muq>=-1 && \[Epsilon] > 0&&{ k0,q0,muk, muq,phi, \[Epsilon],\[Nu]}\[Element]Reals;
+$Assumptions= k0>0&&q0>=0&&kmq>=0&& 2 Pi>=phi>=0 && 1>=muk>=-1 && 1>=muq>=-1 && \[Epsilon] > 0&&{ k0,q0,muk, muq,phi, \[Epsilon],\[Nu]}\[Element]Reals;
 k={0,k0 Sqrt[1-muk^2],k0 muk};
 q={q0 Sqrt[1-muq^2] Cos[phi],q0 Sqrt[1-muq^2] Sin[phi],q0 muq};
+\[Nu]=\[Nu];
 End[] 
 
 EndPackage[]

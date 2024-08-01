@@ -35,14 +35,14 @@ mydirectory=ParentDirectory[NotebookDirectory[],2]<>"/randomrange";
 runmakefile[]:=Module[{},
 commake="make -C "<>mydirectory;
 Run[commake];
-]
+];
 
 numbTostring[numb_]:=If[MemberQ[{Infinity,-Infinity},numb],ToString[numb],ToString[numb//CForm]];
 
 getrange[equ0_]:=Module[{equ=equ0},
 equ=equ/.{LessEqual->Less,GreaterEqual->Greater};
-equ/.{a_<\[Nu]<b_:>{a,b},a_<\[Nu]:>{a,Infinity},\[Nu]>a_:>{a,Infinity},\[Nu]<b_:>{-Infinity,b},b_>\[Nu]:>{-Infinity,b}}
-]
+equ/.{a_<Symbol["\[Nu]"]<b_:>{a,b},a_<Symbol["\[Nu]"]:>{a,Infinity},Symbol["\[Nu]"]>a_:>{a,Infinity},Symbol["\[Nu]"]<b_:>{-Infinity,b},b_>Symbol["\[Nu]"]:>{-Infinity,b},Symbol["\[Nu]"]\[Element]Reals->{-Infinity,Infinity}}
+];
 
 
 setinifile[Ranges0_]:=Module[{Ranges=Ranges0},
@@ -61,13 +61,15 @@ P[[2r+1]]={"ranges"<>ToString[r-1]<>"UV"->numbTostring[UVa]<>","<>numbTostring[U
 inicontent=ExportString[<|"General"-><|P|>|>,"Ini"];
 WriteString[inifile,inicontent];
 Close[inifile];
-]
+];
 
 runcode[n0_]:=Module[{n=n0},
 comrun="cd "<>mydirectory<>" && ./Main";
-comrun =comrun<>comoutput;
+comrun =comrun<>" > "<>mydirectory<>"/file.txt";
+Print["run command: ",comrun];
 Run[comrun];
 file=mydirectory<>"/file.txt";
+Print["import command: ",file];
 output=Import[file];
 
 nuArr=ConstantArray[0,n];
@@ -84,43 +86,14 @@ nuArr[[i]]=Tonumber[StringTrim[StringSplit[output[[i+1]],"="][[2]]]];
 ];
 LDiv=ToExpression[StringReplace[remLetEq[output[[-1]]],{"["->"{","]"->"}"}]];
 {Nc,Ndivs,nuArr,LDiv}
-]
-
-reducebiases[SymM0_,unSymM0_]:=Module[{SymM=SymM0,unSymM=unSymM0},
-
-n=Length[SymM];
-
-(*get matrix of {{IRdivergence range, IRdivergent piece},{UVdivergence range, UVdivergent piece}} for each element of SymM
-Very slow
-*)
-tb0=AbsoluteTiming[
-symDivs=Table[Print[is,",",js];
-UVIRbiases[SymM[[is,js]],"sym"],{is,n},{js,is}
 ];
-symDivs=SymmetricMatrix[symDivs];
 
-symranges=symDivs[[All,All,1]];
-][[1]];
-
-Print["symDivs: ",tb0];
-
-(*do the same for unsymmetric part*)
-tb1=AbsoluteTiming[
-unsymDivs=ParallelMap[UVIRbiases[#,"unsym"]&,unSymM,{2}];
-unsymranges=unsymDivs[[All,All,1]];
-][[1]];
-Print["unsymDivs: ",tb1];
-
-(*collect all ranges together*)
-tb2=AbsoluteTiming[
-Ranges=Join[ArrayReshape[symranges,{n^2,2}],ArrayReshape[unsymranges,{n^2,2}]];
-][[1]];
-Print["Ranges: ",tb2];
+reducebiases[n0_,ranges0_]:=Module[{n=n0,ranges=ranges0},
 
 runmakefile[];
 
 tb3=AbsoluteTiming[
-setinifile[Ranges];
+setinifile[ranges];
 ][[1]];
 Print["setinifile: ",tb3];
 
@@ -130,19 +103,8 @@ tb4=AbsoluteTiming[
 ][[1]];
 Print["runcode: ",tb4];
 
-divterm[x0_,y0_,range0_]:=Module[{x=x0,y=y0,range=range0},
-If[LDiv[[x,y]]==0,0,range[[x,y,2]]]
+{LDiv,biases}
 ];
-
-(*separate divergent pieces into symmetric and unsymmetric parts*)
-tb5=AbsoluteTiming[
-SymDivergences=Table[divterm[i,j,symranges],{i,n},{j,n}];
-UnSymDivergences=Table[divterm[i,j,unsymranges],{i,n},{j,n}];
-][[1]];
-Print["get divergences: ",tb5];
-
-{SymDivergences,UnSymDivergences,biases}
-]
 
 
 End[]

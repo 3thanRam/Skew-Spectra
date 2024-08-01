@@ -30,12 +30,13 @@ Pq::usage="To be replaced by integral over q0 of P(q0) (and any q0 dependent ter
 Begin["`Private`"]
 
 Get[NotebookDirectory[]<>"globalvars.m"] ;
+(*$Assumptions= k0>0&&q0>=0&&kmq>=0&& 2 Pi>=phi>=0 && 1>=muk>=-1 && 1>=muq>=-1 && \[Epsilon] > 0&&{ k0,q0,muk, muq,phi, \[Epsilon],\[Nu]}\[Element]Reals;*)
 
 (*mathematica can often calculate an integral faster by first calculating the indefinite integration then taking the limit for the different bounds*)
 fastintegral[expr0_,var0_,a0_,b0_]:=Module[{expr=expr0,var=var0,a=a0,b=b0},
 indef=Integrate[expr,var];
-Ib=Quiet[Limit[indef,var->b,Direction->"FromBelow"]];
-Ia=Quiet[Limit[indef,var->a,Direction->"FromAbove"]];
+indef=If[NumericQ[indef],{indef,indef},indef];
+{Ib,Ia}=Quiet[Limit[indef,var->{b,a},Direction->{"FromBelow","FromAbove"},Assumptions->$Assumptions]];
 Ib-Ia
 ];
 
@@ -46,9 +47,10 @@ phimuintegratelimit[fct0_,limit0_]:=phimuintegratelimit[fct0,limit0]=Module[{fct
 q0k0replace=If[limit=="UV",{k0-> \[Epsilon] q0},{q0-> \[Epsilon] k0}];
 ordeps=If[limit=="UV",4,1];
 
-expr=q0^2 fct/.q0k0replace//Rationalize//Simplify;
-expr =Normal[Series[expr ,{\[Epsilon],0,ordeps}]]//Simplify;
-expr =Assuming[ $Assumptions,fastintegral[expr,phi,0,2\[Pi]]]// Simplify;
+expr=q0^2 fct/.q0k0replace//Rationalize;
+expr=Assuming[$Assumptions,Simplify[expr]];
+expr =Normal[Series[expr ,{\[Epsilon],0,ordeps}]];
+expr =fastintegral[expr,phi,0,2\[Pi]];
 expr =fastintegral[expr,muq,-1,1] //ExpandAll
 ];
 
@@ -85,7 +87,7 @@ singlebias[expr0_]:=Module[{expr=expr0},
 default=\[Nu]\[Element]Reals;
 {q0pow,coef}=expr[[{1,2}]];
 s=Quiet[Assuming[$Assumptions,Simplify@Solve[q0^q0pow==0,{q0,\[Nu]}]][[1]][[1]]];
-reg=If[ResourceFunction["EmptyQ"][s],default,If[s[[1]]==q0&&s[[2]][[1]]==0,Not[s[[2]][[2]]],default]]
+reg=If[ResourceFunction["EmptyQ"][s],default,If[s[[1]]==q0&&s[[2]][[1]]==0,s[[2]][[2]],default]]
 
 ];
 
@@ -97,7 +99,7 @@ extractnuterms:=DeleteCases[vi_/;FreeQ[vi,\[Nu]]==True];
 
 (*get power of k0/q0 of an expression *)
 vectpow[vect0_,expr0_]:=Module[{vect=vect0,expr=expr0},
-normexpr=If[expr==0,1,expr];
+normexpr=If[PossibleZeroQ[expr],1,expr];
 expr=vect D[expr,vect]/normexpr ;
 expr=If[Head[expr]===Plus,List@@expr,{expr}];
 res=extractnuterms[expr];
@@ -111,12 +113,21 @@ powPq=vectpow[q0,expr];
 expr0 (Pk/k0^\[Nu])^powPk  (Pq/q0^\[Nu])^powPq  //Simplify
 ];
 
+(*replace kmq by its expression*)
+replacekmq[expr0_]:=Module[{expr=expr0},
+expr=Assuming[$Assumptions,Simplify[expr]];
+expr/.{kmq->Sqrt[k0^2 +q0^2-2k0 q0(muk muq+Sqrt[1-muk^2] Sqrt[1-muq^2] Sin[phi])]}//Simplify
+];
+
 (*get leading UV and IR divergent pieces and the ranges where its necessary to account for them *)
 UVIRbiases[expr0_,mode0_]:=Module[{expr=expr0,mode=mode0},
+expr=replacekmq[expr];
+
 Pl1=q0^\[Nu];
 Pl2=If[mode=="sym", Norm[k-q]^\[Nu],k0^\[Nu]];
 
 {IRint,UVint}=Table[phimuintegratelimit[expr  Pl1 Pl2,limit],{limit,{"IR","UV"}}];
+
 IRq0fact=q0factor[integrandlimit[IRint,"IR"]];
 UVq0fact=q0factor[integrandlimit[UVint,"UV"]];
 

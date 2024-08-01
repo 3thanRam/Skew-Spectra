@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     30482,        729]
-NotebookOptionsPosition[     29750,        708]
-NotebookOutlinePosition[     30178,        725]
-CellTagsIndexPosition[     30135,        722]
+NotebookDataLength[     34414,        811]
+NotebookOptionsPosition[     33682,        790]
+NotebookOutlinePosition[     34110,        807]
+CellTagsIndexPosition[     34067,        804]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -46,7 +46,27 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
     RowBox[{"Get", "[", 
      RowBox[{
       RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<globalvars.m\>\""}],
-      "]"}], " ", ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      "]"}], " ", ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"$Assumptions", "=", " ", 
+      RowBox[{
+       RowBox[{"k0", ">", "0"}], "&&", 
+       RowBox[{"q0", ">=", "0"}], "&&", 
+       RowBox[{"kmq", ">=", "0"}], "&&", " ", 
+       RowBox[{
+        RowBox[{"2", " ", "Pi"}], ">=", "phi", ">=", "0"}], " ", "&&", " ", 
+       RowBox[{"1", ">=", "muk", ">=", 
+        RowBox[{"-", "1"}]}], " ", "&&", " ", 
+       RowBox[{"1", ">=", "muq", ">=", 
+        RowBox[{"-", "1"}]}], " ", "&&", " ", 
+       RowBox[{"\[Epsilon]", " ", ">", " ", "0"}], "&&", 
+       RowBox[{
+        RowBox[{"{", " ", 
+         RowBox[{
+         "k0", ",", "q0", ",", "muk", ",", " ", "muq", ",", "phi", ",", " ", 
+          "\[Epsilon]", ",", "\[Nu]"}], "}"}], "\[Element]", "Reals"}]}]}], 
+     ";"}], "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{
     "mathematica", " ", "can", " ", "often", " ", "calculate", " ", "an", " ",
@@ -70,20 +90,28 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
         RowBox[{"indef", "=", 
          RowBox[{"Integrate", "[", 
           RowBox[{"expr", ",", "var"}], "]"}]}], ";", "\[IndentingNewLine]", 
-        RowBox[{"Ib", "=", 
+        RowBox[{"indef", "=", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"NumericQ", "[", "indef", "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"indef", ",", "indef"}], "}"}], ",", "indef"}], "]"}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"Ib", ",", "Ia"}], "}"}], "=", 
          RowBox[{"Quiet", "[", 
           RowBox[{"Limit", "[", 
            RowBox[{"indef", ",", 
-            RowBox[{"var", "->", "b"}], ",", 
-            RowBox[{"Direction", "->", "\"\<FromBelow\>\""}]}], "]"}], 
-          "]"}]}], ";", "\[IndentingNewLine]", 
-        RowBox[{"Ia", "=", 
-         RowBox[{"Quiet", "[", 
-          RowBox[{"Limit", "[", 
-           RowBox[{"indef", ",", 
-            RowBox[{"var", "->", "a"}], ",", 
-            RowBox[{"Direction", "->", "\"\<FromAbove\>\""}]}], "]"}], 
-          "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"var", "->", 
+             RowBox[{"{", 
+              RowBox[{"b", ",", "a"}], "}"}]}], ",", 
+            RowBox[{"Direction", "->", 
+             RowBox[{"{", 
+              RowBox[{"\"\<FromBelow\>\"", ",", "\"\<FromAbove\>\""}], 
+              "}"}]}], ",", 
+            RowBox[{"Assumptions", "->", "$Assumptions"}]}], "]"}], "]"}]}], 
+        ";", "\[IndentingNewLine]", 
         RowBox[{"Ib", "-", "Ia"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
    "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
@@ -129,26 +157,24 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
           RowBox[{
            RowBox[{
             RowBox[{
-             RowBox[{
-              RowBox[{"q0", "^", "2"}], " ", "fct"}], "/.", "q0k0replace"}], "//",
-             "Rationalize"}], "//", "Simplify"}]}], ";", 
+             RowBox[{"q0", "^", "2"}], " ", "fct"}], "/.", "q0k0replace"}], "//",
+            "Rationalize"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"expr", "=", 
+          RowBox[{"Assuming", "[", 
+           RowBox[{"$Assumptions", ",", 
+            RowBox[{"Simplify", "[", "expr", "]"}]}], "]"}]}], ";", 
          "\[IndentingNewLine]", 
          RowBox[{"expr", " ", "=", 
-          RowBox[{
-           RowBox[{"Normal", "[", 
-            RowBox[{"Series", "[", 
-             RowBox[{"expr", " ", ",", 
-              RowBox[{"{", 
-               RowBox[{"\[Epsilon]", ",", "0", ",", "ordeps"}], "}"}]}], 
-             "]"}], "]"}], "//", "Simplify"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"Normal", "[", 
+           RowBox[{"Series", "[", 
+            RowBox[{"expr", " ", ",", 
+             RowBox[{"{", 
+              RowBox[{"\[Epsilon]", ",", "0", ",", "ordeps"}], "}"}]}], "]"}],
+            "]"}]}], ";", "\[IndentingNewLine]", 
          RowBox[{"expr", " ", "=", 
-          RowBox[{
-           RowBox[{"Assuming", "[", " ", 
-            RowBox[{"$Assumptions", ",", 
-             RowBox[{"fastintegral", "[", 
-              RowBox[{"expr", ",", "phi", ",", "0", ",", 
-               RowBox[{"2", "\[Pi]"}]}], "]"}]}], "]"}], "//", " ", 
-           "Simplify"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"fastintegral", "[", 
+           RowBox[{"expr", ",", "phi", ",", "0", ",", 
+            RowBox[{"2", "\[Pi]"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
          RowBox[{"expr", " ", "=", 
           RowBox[{
            RowBox[{"fastintegral", "[", 
@@ -372,14 +398,12 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
                 RowBox[{"s", "[", 
                  RowBox[{"[", "2", "]"}], "]"}], "[", 
                 RowBox[{"[", "1", "]"}], "]"}], "==", "0"}]}], ",", 
-             RowBox[{"Not", "[", 
-              RowBox[{
-               RowBox[{"s", "[", 
-                RowBox[{"[", "2", "]"}], "]"}], "[", 
-               RowBox[{"[", "2", "]"}], "]"}], "]"}], ",", "default"}], 
-            "]"}]}], "]"}]}]}]}], "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"s", "[", 
+               RowBox[{"[", "2", "]"}], "]"}], "[", 
+              RowBox[{"[", "2", "]"}], "]"}], ",", "default"}], "]"}]}], 
+          "]"}]}]}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
     RowBox[{
     "simplifies", " ", "region", " ", "with", " ", "multiple", " ", 
@@ -431,8 +455,8 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
         RowBox[{"normexpr", "=", 
          RowBox[{"If", "[", 
           RowBox[{
-           RowBox[{"expr", "==", "0"}], ",", "1", ",", "expr"}], "]"}]}], ";",
-         "\[IndentingNewLine]", 
+           RowBox[{"PossibleZeroQ", "[", "expr", "]"}], ",", "1", ",", 
+           "expr"}], "]"}]}], ";", "\[IndentingNewLine]", 
         RowBox[{"expr", "=", 
          RowBox[{"vect", " ", 
           RowBox[{
@@ -494,6 +518,44 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
           "Simplify"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
    "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"(*", 
+    RowBox[{"replace", " ", "kmq", " ", "by", " ", "its", " ", "expression"}],
+     "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"replacekmq", "[", "expr0_", "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"expr", "=", "expr0"}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"expr", "=", 
+         RowBox[{"Assuming", "[", 
+          RowBox[{"$Assumptions", ",", 
+           RowBox[{"Simplify", "[", "expr", "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"expr", "/.", 
+          RowBox[{"{", 
+           RowBox[{"kmq", "->", 
+            RowBox[{"Sqrt", "[", 
+             RowBox[{
+              RowBox[{"k0", "^", "2"}], " ", "+", 
+              RowBox[{"q0", "^", "2"}], "-", 
+              RowBox[{"2", "k0", " ", "q0", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"muk", " ", "muq"}], "+", 
+                 RowBox[{
+                  RowBox[{"Sqrt", "[", 
+                   RowBox[{"1", "-", 
+                    RowBox[{"muk", "^", "2"}]}], "]"}], " ", 
+                  RowBox[{"Sqrt", "[", 
+                   RowBox[{"1", "-", 
+                    RowBox[{"muq", "^", "2"}]}], "]"}], " ", 
+                  RowBox[{"Sin", "[", "phi", "]"}]}]}], ")"}]}]}], "]"}]}], 
+           "}"}]}], "//", "Simplify"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
     RowBox[{
     "get", " ", "leading", " ", "UV", " ", "and", " ", "IR", " ", "divergent",
       " ", "pieces", " ", "and", " ", "the", " ", "ranges", " ", "where", " ",
@@ -509,6 +571,9 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
         RowBox[{"expr", "=", "expr0"}], ",", 
         RowBox[{"mode", "=", "mode0"}]}], "}"}], ",", "\[IndentingNewLine]", 
       RowBox[{
+       RowBox[{"expr", "=", 
+        RowBox[{"replacekmq", "[", "expr", "]"}]}], ";", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
        RowBox[{"Pl1", "=", 
         RowBox[{"q0", "^", "\[Nu]"}]}], ";", "\[IndentingNewLine]", 
        RowBox[{"Pl2", "=", 
@@ -533,7 +598,7 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
            RowBox[{"limit", ",", 
             RowBox[{"{", 
              RowBox[{"\"\<IR\>\"", ",", "\"\<UV\>\""}], "}"}]}], "}"}]}], 
-         "]"}]}], ";", "\[IndentingNewLine]", 
+         "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
        RowBox[{"IRq0fact", "=", 
         RowBox[{"q0factor", "[", 
          RowBox[{"integrandlimit", "[", 
@@ -659,8 +724,25 @@ terms) when adding divergence\>\""}], ";"}], "\[IndentingNewLine]",
    3.930560477840231*^9, 3.930560487109104*^9}, {3.930561486390045*^9, 
    3.930561490489339*^9}, {3.930561537691237*^9, 3.930561545463132*^9}, {
    3.930561623117353*^9, 3.930561680274754*^9}, {3.930561767914423*^9, 
-   3.93056187990403*^9}, {3.930815390698296*^9, 
-   3.930815546125794*^9}},ExpressionUUID->"143131c0-54db-480f-ac47-\
+   3.93056187990403*^9}, {3.930815390698296*^9, 3.930815546125794*^9}, 
+   3.930820023606225*^9, {3.930820074346575*^9, 3.930820103966308*^9}, 
+   3.930821303178878*^9, 3.930821344464699*^9, {3.930821378373471*^9, 
+   3.9308213856082907`*^9}, {3.930821433841202*^9, 3.930821440096696*^9}, {
+   3.930821500431432*^9, 3.93082154162815*^9}, {3.930821619318343*^9, 
+   3.930821668184132*^9}, {3.930821714041574*^9, 3.930821720175259*^9}, {
+   3.930821764573229*^9, 3.930821775968721*^9}, {3.9308218305080633`*^9, 
+   3.9308218360793953`*^9}, {3.930821899487591*^9, 3.93082190403693*^9}, 
+   3.930822375675458*^9, {3.930822415759152*^9, 3.930822472212935*^9}, 
+   3.930822793164032*^9, {3.930822862965046*^9, 3.9308228682407913`*^9}, {
+   3.930823271150813*^9, 3.930823320715472*^9}, {3.930823446814093*^9, 
+   3.930823458805995*^9}, {3.930823526730889*^9, 3.930823531078171*^9}, 
+   3.930823841330083*^9, {3.930824172686029*^9, 3.930824195030999*^9}, {
+   3.930824226820079*^9, 3.930824328525187*^9}, {3.930824362743841*^9, 
+   3.930824382102072*^9}, {3.930824546298296*^9, 3.930824558886183*^9}, {
+   3.930825278864607*^9, 3.930825329562269*^9}, {3.930825391613774*^9, 
+   3.930825394485915*^9}, {3.931242935776276*^9, 3.931242946506832*^9}, {
+   3.9312476488601093`*^9, 3.9312476713921547`*^9}, {3.931432443619142*^9, 
+   3.931432444918314*^9}},ExpressionUUID->"143131c0-54db-480f-ac47-\
 f2f3a1ce3307"],
 
 Cell[BoxData["\<\"fftlogdiv`\"\>"], "Output",
@@ -708,7 +790,7 @@ Cell[BoxData["\<\"fftlogdiv`Private`\"\>"], "Output",
 },
 AutoGeneratedPackage->Automatic,
 WindowSize->{693.75, 762},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
 FrontEndVersion->"14.0 for Linux x86 (64-bit) (December 12, 2023)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"0f975ff7-7bd6-4fdb-aca3-5249f49d4078"
@@ -725,11 +807,11 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 26737, 641, 2906, "Input",ExpressionUUID->"143131c0-54db-480f-ac47-f2f3a1ce3307",
+Cell[580, 22, 30669, 723, 3261, "Input",ExpressionUUID->"143131c0-54db-480f-ac47-f2f3a1ce3307",
  InitializationCell->True],
-Cell[27320, 665, 797, 12, 33, "Output",ExpressionUUID->"82883c33-dbfe-4082-a56c-cb98406c6d69"],
-Cell[28120, 679, 804, 12, 33, "Output",ExpressionUUID->"008269e9-549e-4f94-8b25-698d12cf5ecb"],
-Cell[28927, 693, 807, 12, 33, "Output",ExpressionUUID->"954783f4-fb4f-4d83-a0a8-ed1e9ed4fc1b"]
+Cell[31252, 747, 797, 12, 33, "Output",ExpressionUUID->"82883c33-dbfe-4082-a56c-cb98406c6d69"],
+Cell[32052, 761, 804, 12, 33, "Output",ExpressionUUID->"008269e9-549e-4f94-8b25-698d12cf5ecb"],
+Cell[32859, 775, 807, 12, 33, "Output",ExpressionUUID->"954783f4-fb4f-4d83-a0a8-ed1e9ed4fc1b"]
 }, Open  ]]
 }
 ]
