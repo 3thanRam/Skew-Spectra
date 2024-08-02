@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      8515,        204]
-NotebookOptionsPosition[      7791,        183]
-NotebookOutlinePosition[      8219,        200]
-CellTagsIndexPosition[      8176,        197]
+NotebookDataLength[     19524,        454]
+NotebookOptionsPosition[     18795,        433]
+NotebookOutlinePosition[     19223,        450]
+CellTagsIndexPosition[     19180,        447]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -28,7 +28,18 @@ Cell[BoxData[
    RowBox[{
     RowBox[{
      RowBox[{"savefunc", "::", "usage"}], "=", "\"\< save results\>\""}], 
-    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"saveSn", "::", "usage"}], "=", 
+     "\"\< save expressions for a given Sn term\>\""}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"getCfct", "::", "usage"}], "=", 
+      "\"\< C code in global context\>\""}], ";"}], "*)"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"Get", "[", 
@@ -152,6 +163,229 @@ Cell[BoxData[
         "\[IndentingNewLine]", "\[IndentingNewLine]", 
         RowBox[{"Close", "[", "file", "]"}], ";"}]}], "\[IndentingNewLine]", 
       "]"}]}], ";"}], "\[IndentingNewLine]", " ", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"numberToLetter", "[", "n_", "]"}], ":=", 
+     RowBox[{"FromCharacterCode", "[", 
+      RowBox[{"64", "+", "n"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getHfct", "[", "fctname_", "]"}], ":=", 
+     RowBox[{"\"\<double complex \>\"", "<>", 
+      RowBox[{"ToString", "[", "fctname", "]"}], "<>", 
+      "\"\<(double complex nu1, double complex nu2,struct pars_struct *pars);\
+\\n\>\""}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"getCfct", "[", 
+      RowBox[{"fctname_", ",", "fctreturn_"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{"CFunction", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\"\<double\>\"", ",", "\"\<complex\>\""}], "}"}], ",", 
+        "fctname", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<double\>\"", ",", "\"\<complex\>\"", " ", ",", 
+            "\"\<nu1\>\""}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<double\>\"", ",", "\"\<complex\>\"", " ", ",", 
+            "\"\<nu2\>\""}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<struct\>\"", ",", " ", "\"\<pars_struct*\>\"", ",", 
+            "\"\<pars\>\""}], "}"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"CReturn", "[", "fctreturn", "]"}], " ", "}"}]}], "]"}], "//",
+       "ToCCodeString"}]}], " ", ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"saveSn", "[", 
+     RowBox[{
+     "ni0_", ",", "SM0_", ",", "UnSM0_", ",", "Symdivergences0_", ",", 
+      "UnSymdivergences0_", ",", "biases0_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"ni", "=", "ni0"}], ",", 
+        RowBox[{"SM", "=", "SM0"}], ",", 
+        RowBox[{"UnSM", "=", "UnSM0"}], ",", 
+        RowBox[{"Symdivergences", "=", "Symdivergences0"}], ",", 
+        RowBox[{"UnSymdivergences", "=", "UnSymdivergences0"}], ",", 
+        RowBox[{"biases", "=", "biases0"}]}], "}"}], ",", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Needs", "[", "\"\<SymbolicC`\>\"", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"n", "=", 
+        RowBox[{"Length", "[", "SM", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"filelocation", "=", 
+        RowBox[{
+         RowBox[{"ParentDirectory", "[", 
+          RowBox[{
+           RowBox[{"NotebookDirectory", "[", "]"}], ",", "2"}], "]"}], "<>", 
+         "\"\</skew_spectra_fftlog\>\""}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Cfile", "=", 
+        RowBox[{"filelocation", "<>", "\"\</src/Snfunctions.c\>\""}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Hfile", "=", 
+        RowBox[{"filelocation", "<>", "\"\</include/Snfunctions.h\>\""}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"includes", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"\"\<#include \>\"", "<>", "i"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"{", 
+             RowBox[{
+             "\"\<\\\"../include/class_funcs.h\\\"\>\"", ",", 
+              "\"\<<stdio.h>\>\"", ",", "\"\<<complex.h>\>\""}], "}"}]}], 
+           "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Hinit", "=", 
+        RowBox[{"Join", "[", 
+         RowBox[{"includes", ",", 
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<\\n#ifndef SNFUNCTIONS\>\"", ",", 
+            "\"\<#define SNFUNCTIONS\\n\\n\>\""}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Cinit", "=", 
+        RowBox[{"{", "\"\<#include \\\"Snfunctions.h\\\"\\n\\n\>\"", "}"}]}], 
+       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"parsreplace", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"cstsi", "->", 
+           RowBox[{"\"\<pars->\>\"", "<>", "cstsi"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"cstsi", ",", 
+            RowBox[{"{", 
+             RowBox[{
+             "\"\<b1\>\"", ",", "\"\<b2\>\"", ",", "\"\<bg2\>\"", ",", 
+              "\"\<f\>\""}], "}"}]}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"rules", "=", 
+        RowBox[{"Join", "[", 
+         RowBox[{"parsreplace", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\"\<k0\>\"", "->", "\"\<pars->k\>\""}], ",", 
+            RowBox[{"\"\<n1\>\"", "->", "\"\<nu1\>\""}], ",", 
+            RowBox[{"\"\<n2\>\"", "->", "\"\<nu2\>\""}], ",", 
+            RowBox[{"\"\<\\\"\>\"", "->", "\"\<\>\""}], ",", 
+            RowBox[{"\"\<Pi\>\"", "->", "\"\<M_PI\>\""}], ",", 
+            RowBox[{"\"\<PI\>\"", "->", "\"\<M_PI\>\""}]}], "}"}]}], "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"replacerules", "=", 
+        RowBox[{"StringReplace", "[", "rules", "]"}]}], ";", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"Ccontent", "=", 
+        RowBox[{"{", "}"}]}], ";", 
+       RowBox[{"Hcontent", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"j", "=", "1"}], ",", 
+         RowBox[{"j", "<", "n"}], ",", 
+         RowBox[{"j", "++"}], ",", 
+         RowBox[{
+          RowBox[{"For", "[", 
+           RowBox[{
+            RowBox[{"s", "=", "1"}], ",", 
+            RowBox[{"s", "<", "3"}], ",", 
+            RowBox[{"s", "++"}], ",", "\[IndentingNewLine]", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"fname", "=", 
+              RowBox[{"\"\<S\>\"", "<>", 
+               RowBox[{"ToString", "[", "ni", "]"}], "<>", "\"\<_\>\"", "<>", 
+               
+               RowBox[{"ToString", "[", "j", "]"}], "<>", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"\"\<sym\>\"", ",", "\"\<unsym\>\""}], "}"}], "[", 
+                RowBox[{"[", "s", "]"}], "]"}]}]}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"fctdata", "=", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"SM", ",", "UnSM"}], "}"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"s", ",", "ni", ",", "j"}], "]"}], "]"}]}], ";", 
+             "\[IndentingNewLine]", "\[IndentingNewLine]", 
+             RowBox[{"For", "[", 
+              RowBox[{
+               RowBox[{"fi", "=", "1"}], ",", 
+               RowBox[{"fi", "<", 
+                RowBox[{
+                 RowBox[{"Length", "[", "fctdata", "]"}], "+", "1"}]}], ",", 
+               RowBox[{"fi", "++"}], ",", "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"fcontent", "=", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"fctdata", "[", 
+                    RowBox[{"[", "fi", "]"}], "]"}], "//", "CForm"}], " ", "//",
+                    "ToString"}], "//", "replacerules"}]}], ";", 
+                "\[IndentingNewLine]", 
+                RowBox[{"extension", "=", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"Length", "[", "fctdata", "]"}], ">", "1"}], ",", 
+                   
+                   RowBox[{"numberToLetter", "[", "fi", "]"}], ",", 
+                   "\"\<\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+                "\[IndentingNewLine]", 
+                RowBox[{"AppendTo", "[", 
+                 RowBox[{"Ccontent", ",", 
+                  RowBox[{"Global`getCfct", "[", 
+                   RowBox[{
+                    RowBox[{"fname", "<>", "extension"}], ",", "fcontent"}], 
+                   "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+                RowBox[{"AppendTo", "[", 
+                 RowBox[{"Hcontent", ",", 
+                  RowBox[{"getHfct", "[", 
+                   RowBox[{"fname", "<>", "extension"}], "]"}]}], "]"}], 
+                ";"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "]"}], 
+             ";"}]}], "]"}], ";"}]}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Hcontent", "=", 
+        RowBox[{"StringRiffle", "[", 
+         RowBox[{
+          RowBox[{"Join", "[", 
+           RowBox[{"Hinit", ",", 
+            RowBox[{"Flatten", "[", "Hcontent", "]"}], ",", 
+            RowBox[{"{", "\"\<\\n#endif\>\"", "}"}]}], "]"}], ",", 
+          "\"\<\\n\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Ccontent", "=", 
+        RowBox[{"StringRiffle", "[", 
+         RowBox[{
+          RowBox[{"Join", "[", 
+           RowBox[{"Cinit", ",", "Ccontent"}], "]"}], ",", "\"\<\\n\>\""}], 
+         "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"WriteString", "[", 
+        RowBox[{"Hfile", ",", "Hcontent"}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Close", "[", "Hfile", "]"}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"WriteString", "[", 
+        RowBox[{"Cfile", ",", "Ccontent"}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Close", "[", "Cfile", "]"}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Print", "[", "\"\<Saving completed\>\"", "]"}], ";"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
    RowBox[{"End", "[", "]"}], " ", "\n", " ", "\[IndentingNewLine]", 
    RowBox[{"EndPackage", "[", "]"}]}]}]], "Input",
  InitializationCell->True,
@@ -162,28 +396,44 @@ Cell[BoxData[
    3.929615430210005*^9}, {3.9296982808439827`*^9, 3.929698334019541*^9}, {
    3.929698423956302*^9, 3.9296988856643257`*^9}, {3.92969899901423*^9, 
    3.929699081111315*^9}, {3.930814962228971*^9, 3.930814972324897*^9}, 
-   3.931431705945134*^9},ExpressionUUID->"c85ae220-2e7f-484d-83ec-\
+   3.931431705945134*^9, {3.931517679033768*^9, 3.931517706777211*^9}, {
+   3.931517739137351*^9, 3.931517764363258*^9}, {3.931588878564384*^9, 
+   3.931589035919908*^9}, {3.931589072759982*^9, 3.931589075480945*^9}, {
+   3.9315891086747313`*^9, 3.931589121919606*^9}, {3.9315938753610697`*^9, 
+   3.931593892320051*^9}, {3.931593936829192*^9, 3.931593970215584*^9}, {
+   3.931594502581513*^9, 3.931594547682282*^9}, {3.9315946809152737`*^9, 
+   3.9315947219604177`*^9}, {3.931594763124625*^9, 3.9315948023726873`*^9}, {
+   3.931594968027494*^9, 3.931594968592271*^9}, 3.931598795403287*^9, {
+   3.931599036919834*^9, 3.931599081654581*^9}, {3.9315991526752462`*^9, 
+   3.931599179594255*^9}, 3.931599266312646*^9, {3.9315997284220333`*^9, 
+   3.931599809008725*^9}, {3.931599871681542*^9, 3.9315998904057837`*^9}, {
+   3.931599929284615*^9, 3.931599941913643*^9}, {3.931600027520598*^9, 
+   3.931600072838299*^9}, 
+   3.9316001194935503`*^9},ExpressionUUID->"c85ae220-2e7f-484d-83ec-\
 ac9a3365f0db"],
 
 Cell[BoxData["\<\"savefcts`\"\>"], "Output",
- CellChangeTimes->{{3.928923067331491*^9, 3.928923068530805*^9}},
+ CellChangeTimes->{{3.928923067331491*^9, 3.928923068530805*^9}, {
+   3.931594842418605*^9, 3.931594842522196*^9}, 3.931599082638961*^9},
  CellLabel->
-  "Out[917]=",ExpressionUUID->"99b8c427-b7a2-48df-90af-640e6f9c7bf0"],
+  "Out[143]=",ExpressionUUID->"a145fd4f-9dfb-4d65-810a-3201e6a693a1"],
 
 Cell[BoxData["\<\"savefcts`Private`\"\>"], "Output",
- CellChangeTimes->{{3.928923067331491*^9, 3.928923068538994*^9}},
+ CellChangeTimes->{{3.928923067331491*^9, 3.928923068530805*^9}, {
+   3.931594842418605*^9, 3.931594842522196*^9}, 3.93159908263997*^9},
  CellLabel->
-  "Out[919]=",ExpressionUUID->"6b4642f6-1175-4aff-a3c6-50b13209e353"],
+  "Out[146]=",ExpressionUUID->"09d08f1c-1384-42b7-8afc-511afc2b51d1"],
 
 Cell[BoxData["\<\"savefcts`Private`\"\>"], "Output",
- CellChangeTimes->{{3.928923067331491*^9, 3.928923068546495*^9}},
+ CellChangeTimes->{{3.928923067331491*^9, 3.928923068530805*^9}, {
+   3.931594842418605*^9, 3.931594842522196*^9}, 3.931599082665938*^9},
  CellLabel->
-  "Out[921]=",ExpressionUUID->"de6b6c70-96ac-4074-9673-97d445bfda9b"]
+  "Out[153]=",ExpressionUUID->"99f05512-f0ab-4459-880c-066f9a587726"]
 }, Open  ]]
 },
 AutoGeneratedPackage->Automatic,
 WindowSize->{693.75, 762},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
 FrontEndVersion->"14.0 for Linux x86 (64-bit) (December 12, 2023)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"ec00e7c6-b015-4043-b977-e28294123c14"
@@ -200,11 +450,11 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 6591, 143, 901, "Input",ExpressionUUID->"c85ae220-2e7f-484d-83ec-ac9a3365f0db",
+Cell[580, 22, 17380, 390, 2316, "Input",ExpressionUUID->"c85ae220-2e7f-484d-83ec-ac9a3365f0db",
  InitializationCell->True],
-Cell[7174, 167, 193, 3, 33, "Output",ExpressionUUID->"99b8c427-b7a2-48df-90af-640e6f9c7bf0"],
-Cell[7370, 172, 201, 3, 33, "Output",ExpressionUUID->"6b4642f6-1175-4aff-a3c6-50b13209e353"],
-Cell[7574, 177, 201, 3, 33, "Output",ExpressionUUID->"de6b6c70-96ac-4074-9673-97d445bfda9b"]
+Cell[17963, 414, 265, 4, 33, "Output",ExpressionUUID->"a145fd4f-9dfb-4d65-810a-3201e6a693a1"],
+Cell[18231, 420, 272, 4, 33, "Output",ExpressionUUID->"09d08f1c-1384-42b7-8afc-511afc2b51d1"],
+Cell[18506, 426, 273, 4, 33, "Output",ExpressionUUID->"99f05512-f0ab-4459-880c-066f9a587726"]
 }, Open  ]]
 }
 ]

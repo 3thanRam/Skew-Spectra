@@ -24,6 +24,8 @@
 BeginPackage["savefcts`"]
 
 savefunc::usage=" save results";
+saveSn::usage=" save expressions for a given Sn term";
+(*getCfct::usage=" C code in global context";*)
 
 Begin["`Private`"]
 Get[NotebookDirectory[]<>"globalvars.m"] ;
@@ -57,6 +59,58 @@ saveMdata["UnSymDivs",UnSymdivergences];
 Close[file];
 ];
  
+numberToLetter[n_]:=FromCharacterCode[64+n];
+
+getHfct[fctname_]:="double complex "<>ToString[fctname]<>"(double complex nu1, double complex nu2,struct pars_struct *pars);\n";
+
+getCfct[fctname_,fctreturn_]:=CFunction[{"double","complex"},fctname,{{"double","complex" ,"nu1"},{"double","complex" ,"nu2"},{"struct", "pars_struct*","pars"}},{CReturn[fctreturn] }]//ToCCodeString ;
+
+
+saveSn[ni0_,SM0_,UnSM0_,Symdivergences0_,UnSymdivergences0_,biases0_]:=Module[{ni=ni0,SM=SM0,UnSM=UnSM0,Symdivergences=Symdivergences0,UnSymdivergences=UnSymdivergences0,biases=biases0},
+
+Needs["SymbolicC`"];
+n=Length[SM];
+filelocation=ParentDirectory[NotebookDirectory[],2]<>"/skew_spectra_fftlog";
+Cfile=filelocation<>"/src/Snfunctions.c";
+Hfile=filelocation<>"/include/Snfunctions.h";
+includes=Table["#include "<>i,{i,{"\"../include/class_funcs.h\"","<stdio.h>","<complex.h>"}}];
+
+Hinit=Join[includes,{"\n#ifndef SNFUNCTIONS","#define SNFUNCTIONS\n\n"}];
+Cinit={"#include \"Snfunctions.h\"\n\n"};
+
+parsreplace=Table[cstsi->"pars->"<>cstsi,{cstsi,{"b1","b2","bg2","f"}}];
+rules=Join[parsreplace,{"k0"->"pars->k","n1"->"nu1","n2"->"nu2","\""->"","Pi"->"M_PI","PI"->"M_PI"}];
+replacerules=StringReplace[rules];
+
+Ccontent={};Hcontent={};
+
+For[j=1,j<n,j++,For[s=1,s<3,s++,
+
+fname="S"<>ToString[ni]<>"_"<>ToString[j]<>{"sym","unsym"}[[s]];
+fctdata={SM,UnSM}[[s,ni,j]];
+
+For[fi=1,fi<Length[fctdata]+1,fi++,
+fcontent=fctdata[[fi]]//CForm //ToString//replacerules;
+extension=If[Length[fctdata]>1,numberToLetter[fi],""];
+
+AppendTo[Ccontent,Global`getCfct[fname<>extension,fcontent]];
+AppendTo[Hcontent,getHfct[fname<>extension]];
+
+];];];
+Hcontent=StringRiffle[Join[Hinit,Flatten[Hcontent],{"\n#endif"}],"\n"];
+
+Ccontent=StringRiffle[Join[Cinit,Ccontent],"\n"];
+
+
+WriteString[Hfile,Hcontent];
+Close[Hfile];
+
+WriteString[Cfile,Ccontent];
+Close[Cfile];
+
+Print["Saving completed"];
+]
+
 End[] 
  
 EndPackage[]
